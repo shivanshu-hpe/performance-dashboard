@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './StorageDeviceTable.css';
+import FeedbackModal from './FeedbackModal';
 
 const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averageData }) => {
+  const [selectedDevice, setSelectedDevice] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleFeedbackClick = (device) => {
+    setSelectedDevice(device);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedDevice(null);
+  };
   const getPerformanceLevel = (score) => {
     if (score >= 90) return 'excellent';
     if (score >= 75) return 'good';
@@ -43,17 +56,9 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
   return (
     <div className="storage-device-table">
       <div className="table-header">
-        <div className="header-content">
-          <div>
-            <h3>📊 HPE Storage Product Overview</h3>
-            <p>Comprehensive comparison of all HPE storage solutions with key scores</p>
-          </div>
-          <button 
-            className="insights-btn"
-            onClick={() => onViewInsights('overview')}
-          >
-            📈 View Insights
-          </button>
+        <div>
+          <h3>📊 HPE Storage Product Overview</h3>
+          <p>Comprehensive comparison of all HPE storage solutions with key scores</p>
         </div>
       </div>
       
@@ -62,8 +67,6 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
           <thead>
             <tr>
               <th>Product Name</th>
-              <th>Product Line</th>
-              <th>Tier</th>
               <th>Type</th>
               <th 
                 className={`sortable ${sortConfig?.key === 'deviceScore' ? 'active' : ''}`}
@@ -75,7 +78,7 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
                 className={`sortable ${sortConfig?.key === 'score' ? 'active' : ''}`}
                 onClick={() => onSort('score')}
               >
-                HPE Performance Score {getSortIcon('score')}
+                Performance Score {getSortIcon('score')}
               </th>
               <th 
                 className={`sortable ${sortConfig?.key === 'greenScore' ? 'active' : ''}`}
@@ -89,7 +92,7 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
               >
                 Feature Score {getSortIcon('featureScore')}
               </th>
-              <th>Deployment</th>
+              <th>Feedback</th>
             </tr>
           </thead>
           <tbody>
@@ -108,8 +111,6 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
                     {device.name}
                   </button>
                 </td>
-                <td>{device.productLine}</td>
-                <td>{device.tier}</td>
                 <td>
                   <span className={`device-type ${device.type.toLowerCase().replace(' ', '-')}`}>
                     {device.type}
@@ -167,7 +168,15 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
                     </div>
                   </div>
                 </td>
-                <td>{device.deployment}</td>
+                <td>
+                  <button 
+                    className="feedback-button"
+                    onClick={() => handleFeedbackClick(device)}
+                    title="View improvement suggestions"
+                  >
+                    💡 Get Suggestions
+                  </button>
+                </td>
               </tr>
               );
             })}
@@ -182,7 +191,7 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
             <span className="stat-value">{devices.length}</span>
           </div>
           <div className="stat">
-            <span className="stat-label">Highest HPE Performance Score:</span>
+            <span className="stat-label">Highest Performance Score:</span>
             <span className="stat-value">
               {devices.reduce((best, device) => 
                 device.score > best.score ? device : best
@@ -215,6 +224,13 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
           </div>
         </div>
       </div>
+      
+      <FeedbackModal 
+        device={selectedDevice}
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        averageData={averageData}
+      />
     </div>
   );
 };

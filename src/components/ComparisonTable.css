@@ -1,22 +1,19 @@
 /* Comparison Tables Styles */
 .comparison-table {
   background: white;
-  border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-bottom: 30px;
   overflow: hidden;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .comparison-table .table-header {
   background: linear-gradient(135deg, #01A982 0%, #009B7A 100%);
   color: white;
   padding: 20px 25px;
-}
-
-.comparison-table .header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  text-align: center;
 }
 
 .comparison-table .table-header h3 {
@@ -188,12 +185,14 @@
 /* Common table styles for comparison tables */
 .comparison-table .table-container {
   overflow-x: auto;
+  width: 100%;
 }
 
 .comparison-table table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+  min-width: 1400px;
 }
 
 .comparison-table th {
@@ -270,6 +269,25 @@
 .comparison-table .device-name-link:hover {
   color: #009B7A;
   text-decoration: underline;
+}
+
+.comparison-table .feedback-button {
+  background: linear-gradient(135deg, #01a982, #019870);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(1, 169, 130, 0.2);
+}
+
+.comparison-table .feedback-button:hover {
+  background: linear-gradient(135deg, #019870, #017a5f);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(1, 169, 130, 0.3);
 }
 
 .comparison-table .score-container {
@@ -359,8 +377,9 @@
 .comparison-table .summary-stats {
   display: flex;
   justify-content: space-around;
-  flex-wrap: wrap;
-  gap: 20px;
+  flex-wrap: nowrap;
+  gap: 15px;
+  overflow-x: auto;
 }
 
 .comparison-table .stat {
@@ -368,18 +387,21 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  min-width: 120px;
+  flex-shrink: 0;
 }
 
 .comparison-table .stat-label {
-  font-size: 12px;
+  font-size: 10px;
   color: #666;
   margin-bottom: 4px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .comparison-table .stat-value {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 700;
   color: #01A982;
 }

@@ -1,8 +1,9 @@
 .storage-device-table {
   background: white;
-  border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  width: 100%;
+  margin: 0;
 }
 
 .device-row:hover {
@@ -15,12 +16,7 @@
   background: linear-gradient(135deg, #01A982 0%, #009B7A 100%);
   color: white;
   border-bottom: none;
-}
-
-.header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  text-align: center;
 }
 
 .table-header h3 {
@@ -82,14 +78,14 @@
 
 .table-container {
   overflow-x: auto;
-  max-height: 600px;
-  overflow-y: auto;
+  width: 100%;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+  min-width: 1400px;
 }
 
 thead {
@@ -148,8 +144,33 @@ th.sortable.active span.sort-icon {
 }
 
 th:first-child {
-  width: 60px;
-  text-align: center;
+  width: 250px;
+  min-width: 200px;
+  text-align: left;
+}
+
+/* Column width optimizations */
+th:nth-child(1) { /* Product Name */
+  width: 20%;
+  min-width: 250px;
+}
+
+th:nth-child(2) { /* Type */
+  width: 10%;
+  min-width: 120px;
+}
+
+th:nth-child(3), /* Device Score */
+th:nth-child(4), /* Performance Score */
+th:nth-child(5), /* Green Score */
+th:nth-child(6) { /* Feature Score */
+  width: 16%;
+  min-width: 180px;
+}
+
+th:nth-child(7) { /* Feedback */
+  width: 6%;
+  min-width: 150px;
 }
 
 .device-row {
@@ -166,10 +187,11 @@ td {
   padding: 12px;
   border-bottom: 1px solid #dee2e6;
   vertical-align: middle;
+  text-align: left;
 }
 
 td:first-child {
-  text-align: center;
+  text-align: left;
 }
 
 .device-name {
@@ -198,6 +220,25 @@ td:first-child {
 
 .device-name-link:active {
   color: #006B3F;
+}
+
+.feedback-button {
+  background: linear-gradient(135deg, #01a982, #019870);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(1, 169, 130, 0.2);
+}
+
+.feedback-button:hover {
+  background: linear-gradient(135deg, #019870, #017a5f);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(1, 169, 130, 0.3);
 }
 
 .device-type {
@@ -341,8 +382,9 @@ td:first-child {
 
 .summary-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+  justify-items: center;
 }
 
 .stat {
@@ -353,13 +395,14 @@ td:first-child {
 }
 
 .stat-label {
-  font-size: 0.9em;
+  font-size: 0.75em;
   color: #666;
   margin-bottom: 4px;
+  white-space: nowrap;
 }
 
 .stat-value {
-  font-size: 1.2em;
+  font-size: 1em;
   font-weight: 600;
   color: #333;
 }
@@ -372,17 +415,46 @@ input[type="checkbox"] {
 }
 
 /* Responsive design */
+@media (max-width: 1200px) {
+  .storage-device-table {
+    margin: 0;
+  }
+  
+  table {
+    min-width: 1000px;
+  }
+  
+  th:nth-child(1) { /* Product Name */
+    width: 20%;
+    min-width: 180px;
+  }
+}
+
 @media (max-width: 768px) {
+  .app-main {
+    padding: 0;
+  }
+  
+  .storage-device-table {
+    margin: 0;
+  }
+  
   .table-header {
     padding: 15px;
   }
   
   table {
+    min-width: 800px;
     font-size: 12px;
   }
   
   th, td {
-    padding: 8px 6px;
+    padding: 10px 8px;
+  }
+  
+  .feedback-button {
+    padding: 6px 10px;
+    font-size: 0.75rem;
   }
   
   .device-name {
@@ -390,13 +462,16 @@ input[type="checkbox"] {
     font-size: 0.9em;
   }
   
-  .view-details-btn {
-    padding: 4px 8px;
-    font-size: 0.7rem;
+  .summary-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
   
-  .summary-stats {
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
+  .stat-label {
+    font-size: 0.7em;
+  }
+  
+  .stat-value {
+    font-size: 0.9em;
   }
 }

@@ -13,15 +13,16 @@ body {
 
 .app {
   min-height: 100vh;
-  padding: 20px;
+  padding: 0;
 }
 
 .app-main {
-  max-width: 1400px;
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 40px;
+  padding: 0;
 }
 
 /* HPE Branding */
@@ -34,13 +35,14 @@ body {
 }
 
 .header-content {
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 1rem;
+  padding: 0;
 }
 
 .hpe-branding {
@@ -145,5 +147,35 @@ body {
   
   .logo-text {
     font-size: 2em;
+  }
+}
+
+/* Large screens - full width utilization */
+@media (min-width: 1200px) {
+  .app-main {
+    padding: 0;
+  }
+}
+
+/* Medium screens */
+@media (max-width: 1200px) {
+  .app-main {
+    padding: 0;
+  }
+}
+
+/* Small screens */
+@media (max-width: 768px) {
+  .app-main {
+    padding: 0;
+    gap: 20px;
+  }
+  
+  .app-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .header-content {
+    padding: 0 10px;
   }
 }

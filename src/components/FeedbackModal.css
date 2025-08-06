@@ -1,0 +1,248 @@
+/* FeedbackModal.css */
+.feedback-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+}
+
+.feedback-modal {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #01a982, #019870);
+  color: white;
+  padding: 20px 25px;
+  border-radius: 12px 12px 0 0;
+  position: relative;
+}
+
+.modal-header h2 {
+  margin: 0 0 5px 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  opacity: 0.9;
+  font-weight: 400;
+}
+
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 5px;
+  line-height: 1;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.close-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.modal-content {
+  padding: 25px;
+}
+
+.device-scores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #01a982;
+}
+
+.score-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.score-label {
+  font-weight: 500;
+  color: #495057;
+}
+
+.score-value {
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.score-value.good {
+  color: #01a982;
+  background-color: rgba(1, 169, 130, 0.1);
+}
+
+.score-value.needs-improvement {
+  color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.suggestions-container {
+  margin-top: 25px;
+}
+
+.suggestion-section {
+  margin-bottom: 25px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.suggestion-title {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  margin: 0;
+  padding: 15px 20px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  align-items: center;
+}
+
+.suggestion-icon {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.recommendation-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recommendation-item {
+  padding: 12px 20px;
+  border-bottom: 1px solid #f8f9fa;
+  position: relative;
+  padding-left: 45px;
+  line-height: 1.5;
+  color: #495057;
+}
+
+.recommendation-item:last-child {
+  border-bottom: none;
+}
+
+.recommendation-item::before {
+  content: "→";
+  position: absolute;
+  left: 20px;
+  color: #01a982;
+  font-weight: 600;
+}
+
+.recommendation-item:hover {
+  background-color: #f8f9fa;
+}
+
+.modal-footer {
+  background: #f8f9fa;
+  padding: 20px 25px;
+  border-top: 1px solid #e9ecef;
+  margin: 0 -25px -25px -25px;
+  border-radius: 0 0 12px 12px;
+}
+
+.hpe-contact {
+  text-align: center;
+  margin: 0;
+}
+
+.hpe-contact p {
+  margin: 5px 0;
+  color: #495057;
+}
+
+.hpe-contact p:first-child {
+  font-weight: 600;
+  color: #01a982;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .feedback-modal {
+    width: 95%;
+    margin: 10px;
+    max-height: 95vh;
+  }
+  
+  .modal-header {
+    padding: 15px 20px;
+  }
+  
+  .modal-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .modal-content {
+    padding: 20px;
+  }
+  
+  .device-scores {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 15px;
+  }
+  
+  .suggestion-title {
+    padding: 12px 15px;
+    font-size: 1rem;
+  }
+  
+  .recommendation-item {
+    padding: 10px 15px;
+    padding-left: 35px;
+  }
+  
+  .recommendation-item::before {
+    left: 15px;
+  }
+}

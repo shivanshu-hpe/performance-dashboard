@@ -340,7 +340,7 @@ function App() {
         return [
           { label: 'Device Score', getValue: (data) => data.deviceScore, unit: '/100' },
           { label: 'Performance Score', getValue: (data) => data.score, unit: '/100' },
-          { label: 'HPE Performance Score', getValue: (data) => data.hpePerformanceScore || data.score, unit: '/100' }
+          { label: 'Performance Score', getValue: (data) => data.hpePerformanceScore || data.score, unit: '/100' }
         ];
       case 'sustainability':
         return [

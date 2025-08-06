@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ComparisonTable.css';
+import PerformanceFeedbackModal from './PerformanceFeedbackModal';
 
 const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageData }) => {
+  const [selectedDevice, setSelectedDevice] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleFeedbackClick = (device) => {
+    setSelectedDevice(device);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedDevice(null);
+  };
   const getPerformanceLevel = (score) => {
     if (score >= 90) return 'excellent';
     if (score >= 75) return 'good';
@@ -41,17 +54,9 @@ const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageD
   return (
     <div className="comparison-table performance-table">
       <div className="table-header">
-        <div className="header-content">
-          <div>
-            <h3>⚡ Performance Metrics Comparison</h3>
-            <p>Speed, capacity, and operational performance indicators</p>
-          </div>
-          <button 
-            className="insights-btn"
-            onClick={() => onViewInsights('performance')}
-          >
-            📈 View Insights
-          </button>
+        <div>
+          <h3>⚡ Performance Metrics Comparison</h3>
+          <p>Speed, capacity, and operational performance indicators</p>
         </div>
       </div>
       
@@ -60,7 +65,6 @@ const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageD
           <thead>
             <tr>
               <th>Product Name</th>
-              <th>Product Line</th>
               <th 
                 className={`sortable ${sortConfig?.key === 'score' ? 'active' : ''}`}
                 onClick={() => onSort('score')}
@@ -97,6 +101,7 @@ const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageD
               >
                 Latency (ms) {getSortIcon('latency')}
               </th>
+              <th>Feedback</th>
             </tr>
           </thead>
           <tbody>
@@ -110,7 +115,6 @@ const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageD
                     {device.name}
                   </button>
                 </td>
-                <td>{device.productLine}</td>
                 <td>
                   <div className="score-container">
                     <span className={`score ${getComparisonLevel(device.score, averageData?.score || 82)}`}>
@@ -132,6 +136,15 @@ const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageD
                   <span className={device.latency < 0.1 ? 'low-latency' : device.latency < 0.2 ? 'medium-latency' : 'high-latency'}>
                     {device.latency}
                   </span>
+                </td>
+                <td>
+                  <button 
+                    className="feedback-button"
+                    onClick={() => handleFeedbackClick(device)}
+                    title="View performance optimization suggestions"
+                  >
+                    ⚡ Optimize Performance
+                  </button>
                 </td>
               </tr>
             ))}
@@ -165,6 +178,13 @@ const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageD
           </div>
         </div>
       </div>
+      
+      <PerformanceFeedbackModal 
+        device={selectedDevice}
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        averageData={averageData}
+      />
     </div>
   );
 };

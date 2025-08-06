@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ComparisonTable.css';
+import FeatureFeedbackModal from './FeatureFeedbackModal';
 
 const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData }) => {
+  const [selectedDevice, setSelectedDevice] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleFeedbackClick = (device) => {
+    setSelectedDevice(device);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedDevice(null);
+  };
   const getPerformanceLevel = (score) => {
     if (score >= 90) return 'excellent';
     if (score >= 75) return 'good';
@@ -35,17 +48,9 @@ const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData 
   return (
     <div className="comparison-table feature-table">
       <div className="table-header">
-        <div className="header-content">
-          <div>
-            <h3>🔧 Feature Metrics Comparison</h3>
-            <p>Advanced capabilities and supported features</p>
-          </div>
-          <button 
-            className="insights-btn"
-            onClick={() => onViewInsights('features')}
-          >
-            📈 View Insights
-          </button>
+        <div>
+          <h3>🔧 Feature Metrics Comparison</h3>
+          <p>Advanced capabilities and supported features</p>
         </div>
       </div>
       
@@ -54,7 +59,6 @@ const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData 
           <thead>
             <tr>
               <th>Product Name</th>
-              <th>Product Line</th>
               <th 
                 className={`sortable ${sortConfig?.key === 'featureScore' ? 'active' : ''}`}
                 onClick={() => onSort('featureScore')}
@@ -70,7 +74,7 @@ const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData 
               <th>Snapshots</th>
               <th>Replication</th>
               <th>Protocols</th>
-              <th>Deployment</th>
+              <th>Feedback</th>
             </tr>
           </thead>
           <tbody>
@@ -84,7 +88,6 @@ const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData 
                     {device.name}
                   </button>
                 </td>
-                <td>{device.productLine}</td>
                 <td>
                   <div className="score-container">
                     <span className={`score ${getComparisonLevel(device.featureScore, averageData?.featureScore || 80)}`}>
@@ -123,9 +126,13 @@ const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData 
                   </div>
                 </td>
                 <td>
-                  <span className={`deployment-badge ${device.deployment.toLowerCase().replace('-', '_')}`}>
-                    {device.deployment}
-                  </span>
+                  <button 
+                    className="feedback-button"
+                    onClick={() => handleFeedbackClick(device)}
+                    title="View feature enhancement suggestions"
+                  >
+                    🔧 Enhance Features
+                  </button>
                 </td>
               </tr>
             ))}
@@ -161,6 +168,13 @@ const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData 
           </div>
         </div>
       </div>
+      
+      <FeatureFeedbackModal 
+        device={selectedDevice}
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        averageData={averageData}
+      />
     </div>
   );
 };

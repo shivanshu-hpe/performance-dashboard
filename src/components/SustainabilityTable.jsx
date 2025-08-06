@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ComparisonTable.css';
+import SustainabilityFeedbackModal from './SustainabilityFeedbackModal';
 
 const SustainabilityTable = ({ devices, onSort, sortConfig, onViewDetails, averageData }) => {
+  const [selectedDevice, setSelectedDevice] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleFeedbackClick = (device) => {
+    setSelectedDevice(device);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedDevice(null);
+  };
   const getPerformanceLevel = (score) => {
     if (score >= 90) return 'excellent';
     if (score >= 75) return 'good';
@@ -31,17 +44,9 @@ const SustainabilityTable = ({ devices, onSort, sortConfig, onViewDetails, avera
   return (
     <div className="comparison-table sustainability-table">
       <div className="table-header">
-        <div className="header-content">
-          <div>
-            <h3>🌱 Sustainability Metrics Comparison</h3>
-            <p>Environmental impact and energy efficiency ratings</p>
-          </div>
-          <button 
-            className="insights-btn"
-            onClick={() => onViewInsights('sustainability')}
-          >
-            📈 View Insights
-          </button>
+        <div>
+          <h3>🌱 Sustainability Metrics Comparison</h3>
+          <p>Environmental impact and energy efficiency ratings</p>
         </div>
       </div>
       
@@ -50,7 +55,6 @@ const SustainabilityTable = ({ devices, onSort, sortConfig, onViewDetails, avera
           <thead>
             <tr>
               <th>Product Name</th>
-              <th>Product Line</th>
               <th 
                 className={`sortable ${sortConfig?.key === 'greenScore' ? 'active' : ''}`}
                 onClick={() => onSort('greenScore')}
@@ -69,7 +73,7 @@ const SustainabilityTable = ({ devices, onSort, sortConfig, onViewDetails, avera
               >
                 Carbon Reduction % {getSortIcon('sustainability.carbonReduction')}
               </th>
-              <th>Deployment</th>
+              <th>Feedback</th>
             </tr>
           </thead>
           <tbody>
@@ -83,7 +87,6 @@ const SustainabilityTable = ({ devices, onSort, sortConfig, onViewDetails, avera
                     {device.name}
                   </button>
                 </td>
-                <td>{device.productLine}</td>
                 <td>
                   <div className="score-container">
                     <span className={`score ${getComparisonLevel(device.greenScore, averageData?.greenScore || 78)}`}>
@@ -114,9 +117,13 @@ const SustainabilityTable = ({ devices, onSort, sortConfig, onViewDetails, avera
                   <span className="percentage">{device.sustainability.carbonReduction}%</span>
                 </td>
                 <td>
-                  <span className={`deployment-badge ${device.deployment.toLowerCase().replace('-', '_')}`}>
-                    {device.deployment}
-                  </span>
+                  <button 
+                    className="feedback-button"
+                    onClick={() => handleFeedbackClick(device)}
+                    title="View sustainability improvement suggestions"
+                  >
+                    🌱 Get Green Tips
+                  </button>
                 </td>
               </tr>
             ))}
@@ -150,6 +157,13 @@ const SustainabilityTable = ({ devices, onSort, sortConfig, onViewDetails, avera
           </div>
         </div>
       </div>
+      
+      <SustainabilityFeedbackModal 
+        device={selectedDevice}
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        averageData={averageData}
+      />
     </div>
   );
 };
