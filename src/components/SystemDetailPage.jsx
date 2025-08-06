@@ -23,9 +23,13 @@ const SystemDetailPage = ({ system, onBack }) => {
       const date = new Date(now);
       date.setDate(date.getDate() - i);
       
-      const randomVariance = (Math.random() - 0.5) * variance;
-      const trendEffect = trend * (days - i) / days;
-      const value = Math.max(0, Math.min(100, baseValue + randomVariance + trendEffect));
+      // Create smoother variations using sine wave
+      const timeProgress = (days - i) / days;
+      const smoothVariation = Math.sin(timeProgress * Math.PI * 4) * (variance * 0.3);
+      const randomVariance = (Math.random() - 0.5) * (variance * 0.4);
+      const trendEffect = trend * timeProgress;
+      
+      const value = Math.max(0, Math.min(100, baseValue + smoothVariation + randomVariance + trendEffect));
       
       data.push({
         date,
@@ -35,17 +39,23 @@ const SystemDetailPage = ({ system, onBack }) => {
     return data;
   };
 
-  const capacityData = generateTimeSeriesData(45.8, 5, 2);
-  const performanceData = generateTimeSeriesData(85, 8, -1);
-  const greenScoreData = generateTimeSeriesData(92, 3, 1);
-  const sustainabilityData = generateTimeSeriesData(88, 4, 2);
-  
-  // Performance-specific metrics
-  const latencyData = generateTimeSeriesData(system?.latency || 0.12, 0.02, 0);
-  const iopsData = generateTimeSeriesData((system?.iops || 850000) / 10000, 50, 10); // Scale down for visualization
-  const throughputData = generateTimeSeriesData((system?.readSpeed || 6500) / 100, 10, -2); // Scale down read speed
-
   useEffect(() => {
+    // Generate fresh data when timeRange or activeTab changes
+    const capacityData = generateTimeSeriesData(45.8, 5, 2);
+    const performanceData = generateTimeSeriesData(85, 8, -1);
+    const greenScoreData = generateTimeSeriesData(92, 3, 1);
+    const sustainabilityData = generateTimeSeriesData(88, 4, 2);
+    
+    console.log('Generated data for activeTab:', activeTab, {
+      greenScoreData: greenScoreData?.length,
+      sustainabilityData: sustainabilityData?.length
+    });
+    
+    // Performance-specific metrics
+    const latencyData = generateTimeSeriesData(system?.latency || 0.12, 0.02, 0);
+    const iopsData = generateTimeSeriesData((system?.iops || 850000) / 10000, 50, 10);
+    const throughputData = generateTimeSeriesData((system?.readSpeed || 6500) / 100, 10, -2);
+
     if (activeTab === 'performance') {
       createTimeChart(capacityChartRef.current, capacityData, 'Capacity Usage (GiB)', '#01A982', 'GiB');
       createTimeChart(latencyChartRef.current, latencyData, 'Latency (ms)', '#45B7AA', 'ms');
@@ -59,20 +69,27 @@ const SystemDetailPage = ({ system, onBack }) => {
   }, [activeTab, timeRange]);
 
   const createTimeChart = (container, data, title, color, unit) => {
-    if (!container) return;
+    if (!container || !data) {
+      console.log(`Chart creation failed for ${title}:`, { container: !!container, data: !!data });
+      return;
+    }
 
-    const svg = d3.select(container);
-    svg.selectAll("*").remove();
+    console.log(`Creating chart for ${title} with ${data.length} data points`);
 
-    const margin = { top: 40, right: 80, bottom: 60, left: 80 };
-    const width = 800 - margin.left - margin.right;
-    const height = 300 - margin.top - margin.bottom;
+    // Clear any existing content
+    d3.select(container).selectAll("*").remove();
 
-    const svgElement = svg
+    const margin = { top: 40, right: 40, bottom: 60, left: 60 };
+    const containerWidth = container.parentElement?.offsetWidth || 400;
+    const width = Math.max(containerWidth - margin.left - margin.right, 300);
+    const height = 200;
+
+    const svg = d3.select(container)
       .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom);
+      .attr("height", height + margin.top + margin.bottom)
+      .style("background", "white");
 
-    const g = svgElement.append("g")
+    const g = svg.append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
     // Scales
@@ -88,113 +105,88 @@ const SystemDetailPage = ({ system, onBack }) => {
     const line = d3.line()
       .x(d => xScale(d.date))
       .y(d => yScale(d.value))
-      .curve(d3.curveMonotoneX);
+      .curve(d3.curveCardinal);
 
-    // Area generator for gradient fill
-    const area = d3.area()
-      .x(d => xScale(d.date))
-      .y0(height)
-      .y1(d => yScale(d.value))
-      .curve(d3.curveMonotoneX);
-
-    // Gradient definition
-    const gradient = g.append("defs")
-      .append("linearGradient")
-      .attr("id", `gradient-${title.replace(/\s+/g, '')}`)
-      .attr("gradientUnits", "userSpaceOnUse")
-      .attr("x1", 0).attr("y1", height)
-      .attr("x2", 0).attr("y2", 0);
-
-    gradient.append("stop")
-      .attr("offset", "0%")
-      .attr("stop-color", color)
-      .attr("stop-opacity", 0.1);
-
-    gradient.append("stop")
-      .attr("offset", "100%")
-      .attr("stop-color", color)
-      .attr("stop-opacity", 0.6);
-
-    // Add area
-    g.append("path")
-      .datum(data)
-      .attr("fill", `url(#gradient-${title.replace(/\s+/g, '')})`)
-      .attr("d", area);
-
-    // Add line
+    // Add clean line only
     g.append("path")
       .datum(data)
       .attr("fill", "none")
       .attr("stroke", color)
-      .attr("stroke-width", 2)
+      .attr("stroke-width", 2.5)
       .attr("d", line);
 
-    // Add dots
+    // Add dots at data points
     g.selectAll(".dot")
-      .data(data)
+      .data(data.filter((d, i) => i % 2 === 0)) // Show every other point to avoid crowding
       .enter().append("circle")
       .attr("class", "dot")
       .attr("cx", d => xScale(d.date))
       .attr("cy", d => yScale(d.value))
-      .attr("r", 3)
+      .attr("r", 2.5)
       .attr("fill", color)
-      .on("mouseover", function(event, d) {
-        const tooltip = d3.select("body").append("div")
-          .attr("class", "chart-tooltip")
-          .style("opacity", 0);
-
-        tooltip.transition()
-          .duration(200)
-          .style("opacity", .9);
-
-        tooltip.html(`
-          <div class="tooltip-header">${title}</div>
-          <div class="tooltip-content">
-            <div class="tooltip-row">
-              <span class="tooltip-label">Date:</span>
-              <span class="tooltip-value">${d.date.toLocaleDateString()}</span>
-            </div>
-            <div class="tooltip-row">
-              <span class="tooltip-label">Value:</span>
-              <span class="tooltip-value">${d.value} ${unit}</span>
-            </div>
-          </div>
-        `)
-          .style("left", (event.pageX + 10) + "px")
-          .style("top", (event.pageY - 28) + "px");
-      })
-      .on("mouseout", function() {
-        d3.selectAll(".chart-tooltip").remove();
-      });
+      .attr("stroke", "white")
+      .attr("stroke-width", 1.5);
 
     // X axis
+    const xAxis = d3.axisBottom(xScale)
+      .tickFormat(d3.timeFormat("%d %b"))
+      .ticks(Math.min(6, data.length));
+
     g.append("g")
       .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(xScale)
-        .tickFormat(d3.timeFormat("%d %b"))
-        .ticks(6));
+      .call(xAxis)
+      .selectAll("text")
+      .style("font-size", "11px")
+      .style("fill", "#666");
 
     // Y axis
-    g.append("g")
-      .call(d3.axisLeft(yScale));
+    const yAxis = d3.axisLeft(yScale)
+      .ticks(5)
+      .tickFormat(d => {
+        if (unit === 'ms' && d < 1) return d.toFixed(2);
+        if (d >= 1000) return (d/1000).toFixed(1) + 'K';
+        return d.toFixed(1);
+      });
 
-    // Chart title
-    g.append("text")
-      .attr("transform", `translate(${width/2}, -10)`)
-      .style("text-anchor", "middle")
-      .style("font-size", "14px")
-      .style("font-weight", "600")
-      .text(title);
+    g.append("g")
+      .call(yAxis)
+      .selectAll("text")
+      .style("font-size", "11px")
+      .style("fill", "#666");
+
+    // Add grid lines
+    g.selectAll(".grid-line")
+      .data(yScale.ticks(5))
+      .enter()
+      .append("line")
+      .attr("class", "grid-line")
+      .attr("x1", 0)
+      .attr("x2", width)
+      .attr("y1", d => yScale(d))
+      .attr("y2", d => yScale(d))
+      .attr("stroke", "#f0f0f0")
+      .attr("stroke-width", 1);
 
     // Y axis label
     g.append("text")
       .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left)
+      .attr("y", 0 - margin.left + 20)
       .attr("x", 0 - (height / 2))
       .attr("dy", "1em")
       .style("text-anchor", "middle")
-      .style("font-size", "12px")
+      .style("font-size", "11px")
+      .style("fill", "#666")
       .text(unit);
+
+    // Chart title
+    g.append("text")
+      .attr("x", width / 2)
+      .attr("y", -15)
+      .attr("text-anchor", "middle")
+      .style("font-size", "14px")
+      .style("font-weight", "600")
+      .style("fill", "#333")
+      .text(title);
   };
 
   const featureAnalysis = {
@@ -233,8 +225,8 @@ const SystemDetailPage = ({ system, onBack }) => {
         <div className="system-info">
           <h1>{system.name}</h1>
           <div className="system-meta">
-            <span className="system-type">{system.productLine}</span>
-            <span className="system-tier">{system.tier}</span>
+            <span className="system-type">{system.type}</span>
+            <span className="system-tier">Enterprise Tier</span>
             <span className="system-capacity">{system.capacity}</span>
           </div>
         </div>
@@ -299,11 +291,11 @@ const SystemDetailPage = ({ system, onBack }) => {
                 <h3>Configuration Details</h3>
                 <div className="metric-row">
                   <span>Deployment:</span>
-                  <span className="metric-value">{system.deployment}</span>
+                  <span className="metric-value">Cloud Native</span>
                 </div>
                 <div className="metric-row">
                   <span>Data Reduction:</span>
-                  <span className="metric-value">{system.dataReduction}</span>
+                  <span className="metric-value">Up to 5:1</span>
                 </div>
                 <div className="metric-row">
                   <span>Storage Type:</span>
@@ -312,105 +304,6 @@ const SystemDetailPage = ({ system, onBack }) => {
                 <div className="metric-row">
                   <span>Price:</span>
                   <span className="metric-value">${system.price.toLocaleString()}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'sustainability' && (
-          <div className="sustainability-tab">
-            <div className="metrics-header">
-              <h2>Sustainability Metrics</h2>
-              <div className="time-range-selector">
-                <button 
-                  className={`time-btn ${timeRange === '1W' ? 'active' : ''}`}
-                  onClick={() => setTimeRange('1W')}
-                >
-                  1W
-                </button>
-                <button 
-                  className={`time-btn ${timeRange === '1M' ? 'active' : ''}`}
-                  onClick={() => setTimeRange('1M')}
-                >
-                  1M
-                </button>
-                <button 
-                  className={`time-btn ${timeRange === '3M' ? 'active' : ''}`}
-                  onClick={() => setTimeRange('3M')}
-                >
-                  3M
-                </button>
-              </div>
-            </div>
-
-            <div className="charts-grid">
-              <div className="chart-container">
-                <svg ref={greenScoreChartRef}></svg>
-              </div>
-              
-              <div className="chart-container">
-                <svg ref={sustainabilityChartRef}></svg>
-              </div>
-            </div>
-
-            <div className="sustainability-summary">
-              <div className="summary-card">
-                <h4>Current Sustainability Status</h4>
-                <div className="status-grid">
-                  <div className="status-item">
-                    <span className="status-label">Green Score:</span>
-                    <span className="status-value">92/100</span>
-                  </div>
-                  <div className="status-item">
-                    <span className="status-label">Power Efficiency:</span>
-                    <span className="status-value">{system.sustainability?.powerEfficiency || 95}%</span>
-                  </div>
-                  <div className="status-item">
-                    <span className="status-label">Carbon Reduction:</span>
-                    <span className="status-value">{system.sustainability?.carbonReduction || 40}%</span>
-                  </div>
-                  <div className="status-item">
-                    <span className="status-label">Energy Rating:</span>
-                    <span className="status-value">A+ Certified</span>
-                  </div>
-                  <div className="status-item">
-                    <span className="status-label">Data Reduction Ratio:</span>
-                    <span className="status-value">{system.dataReduction}</span>
-                  </div>
-                  <div className="status-item">
-                    <span className="status-label">Sustainability Index:</span>
-                    <span className="status-value">88/100</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="sustainability-insights">
-                <div className="insight-card">
-                  <h4>Environmental Impact</h4>
-                  <div className="impact-metrics">
-                    <div className="impact-item">
-                      <span className="impact-icon">🌱</span>
-                      <div className="impact-content">
-                        <span className="impact-title">CO₂ Savings</span>
-                        <span className="impact-value">{system.sustainability?.carbonReduction || 40}% reduction vs traditional storage</span>
-                      </div>
-                    </div>
-                    <div className="impact-item">
-                      <span className="impact-icon">⚡</span>
-                      <div className="impact-content">
-                        <span className="impact-title">Energy Efficiency</span>
-                        <span className="impact-value">{system.sustainability?.powerEfficiency || 95}% efficient power usage</span>
-                      </div>
-                    </div>
-                    <div className="impact-item">
-                      <span className="impact-icon">📦</span>
-                      <div className="impact-content">
-                        <span className="impact-title">Space Optimization</span>
-                        <span className="impact-value">{system.dataReduction} data reduction ratio</span>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -571,11 +464,11 @@ const SystemDetailPage = ({ system, onBack }) => {
 
             <div className="charts-grid">
               <div className="chart-container">
-                <svg ref={greenScoreChartRef}></svg>
+                <h5>Green Score</h5>              <svg ref={greenScoreChartRef}></svg>
               </div>
               
               <div className="chart-container">
-                <svg ref={sustainabilityChartRef}></svg>
+                <h5>Sustainability Index</h5>               <svg ref={sustainabilityChartRef}></svg>
               </div>
             </div>
 
@@ -601,7 +494,7 @@ const SystemDetailPage = ({ system, onBack }) => {
                   </div>
                   <div className="status-item">
                     <span className="status-label">Data Reduction Ratio:</span>
-                    <span className="status-value">{system.dataReduction}</span>
+                    <span className="status-value">"Up to 5:1"</span>
                   </div>
                   <div className="status-item">
                     <span className="status-label">Sustainability Index:</span>
@@ -632,7 +525,7 @@ const SystemDetailPage = ({ system, onBack }) => {
                       <span className="impact-icon">📦</span>
                       <div className="impact-content">
                         <span className="impact-title">Space Optimization</span>
-                        <span className="impact-value">{system.dataReduction} data reduction ratio</span>
+                        <span className="impact-value">"Up to 5:1" data reduction ratio</span>
                       </div>
                     </div>
                   </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import './App.css';
 import StorageDeviceTable from './components/StorageDeviceTable';
 import SustainabilityTable from './components/SustainabilityTable';
@@ -61,7 +62,10 @@ const hpeTheme = {
   },
 };
 
-function App() {
+// Dashboard Component
+function Dashboard() {
+  const navigate = useNavigate();
+  
   // Main state for data
   const [data, setData] = useState([]);
   const [sustainabilityData, setSustainabilityData] = useState([]);
@@ -73,7 +77,6 @@ function App() {
   const [error, setError] = useState(null);
   
   // UI state
-  const [selectedDevice, setSelectedDevice] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: 'deviceScore', direction: 'desc' });
 
   // Load all data from API or mock
@@ -116,6 +119,21 @@ function App() {
   useEffect(() => {
     loadAllData();
   }, []);
+
+  // Handle system selection (navigate to detail page)
+  const handleSystemSelect = (system) => {
+    console.log('📱 Navigating to system:', system.name);
+    navigate(`/system/${system.id}`);
+  };
+
+  // Sort handler
+  const handleSort = (sortKey) => {
+    console.log('🔄 Sorting by:', sortKey);
+    setSortConfig(prevConfig => ({
+      key: sortKey,
+      direction: prevConfig.key === sortKey && prevConfig.direction === 'desc' ? 'asc' : 'desc'
+    }));
+  };
 
   // Calculate totals for the averages
   const calculateAverages = (data) => {
@@ -170,15 +188,6 @@ function App() {
   // Calculate averages for display
   const averageData = calculateAverages(enrichedData);
 
-  // Sorting functionality
-  const handleSort = (key) => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
-    }
-    setSortConfig({ key, direction });
-  };
-
   // Sort data based on current sort configuration
   const sortedData = [...enrichedData].sort((a, b) => {
     if (!sortConfig.key) return 0;
@@ -197,23 +206,8 @@ function App() {
 
   // View details handler
   const handleViewDetails = (device) => {
-    setSelectedDevice(device);
+    handleSystemSelect(device);
   };
-
-  // Close details handler
-  const handleCloseDetails = () => {
-    setSelectedDevice(null);
-  };
-
-  // Show detailed view if device is selected
-  if (selectedDevice) {
-    return (
-      <SystemDetailPage 
-        device={selectedDevice} 
-        onClose={handleCloseDetails}
-      />
-    );
-  }
 
   // Loading state
   if (loading) {
@@ -332,6 +326,74 @@ function App() {
         </Main>
       </div>
     </Grommet>
+  );
+}
+
+// SystemDetail Component (wrapper for routing)
+function SystemDetail() {
+  const { systemId } = useParams();
+  const navigate = useNavigate();
+  const [data, setData] = useState([]);
+  
+  // Load data to find the selected system
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const devices = await StorageApiService.getStorageDevices();
+        setData(devices);
+      } catch (err) {
+        console.error('Error loading system data:', err);
+      }
+    };
+    loadData();
+  }, []);
+
+  // Convert systemId to number for comparison since mock data uses numeric IDs
+  const numericSystemId = parseInt(systemId, 10);
+  const selectedSystem = data.find(system => 
+    system.id === systemId || system.id === numericSystemId
+  );
+
+  const handleBack = () => {
+    navigate('/');
+  };
+
+  if (!data.length) {
+    return (
+      <div className="app">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading system details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!selectedSystem) {
+    return (
+      <div className="app">
+        <div className="error-container">
+          <h2>System Not Found</h2>
+          <p>System with ID "{systemId}" could not be found.</p>
+          <button onClick={handleBack} className="retry-button">
+            Back to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return <SystemDetailPage system={selectedSystem} onBack={handleBack} />;
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/system/:systemId" element={<SystemDetail />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

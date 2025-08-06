@@ -275,8 +275,8 @@
 
 .charts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
   margin-bottom: 3rem;
 }
 
@@ -287,11 +287,13 @@
 }
 
 .chart-container {
-  background: #fafcfb;
+  background: white;
   border: 1px solid #e8f0ed;
   border-radius: 12px;
   padding: 1.5rem;
-  overflow-x: auto;
+  overflow: visible;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  min-height: 280px;
 }
 
 .chart-container h5 {
@@ -307,6 +309,7 @@
 .chart-container svg {
   width: 100%;
   height: auto;
+  display: block;
 }
 
 .metrics-summary {
@@ -325,35 +328,51 @@
 
 .status-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
 }
 
 .status-item {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  padding: 1rem;
+  background: #f8faf9;
+  border: 1px solid #e1e8e5;
+  border-radius: 8px;
+  text-align: center;
 }
 
 .status-label {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #6b7b77;
   font-weight: 500;
+  margin-bottom: 0.2rem;
 }
 
 .status-value {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1.2rem;
+  font-weight: 700;
   color: #01A982;
 }
 
 /* Sustainability Tab Specific Styles */
+.sustainability-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.sustainability-tab .charts-grid {
+  margin-bottom: 2rem;
+}
+
 .sustainability-summary {
   background: #f8faf9;
   border-radius: 12px;
   padding: 1.5rem;
   border: 1px solid #e1e8e5;
-  margin-bottom: 2rem;
+  margin-top: 1rem;
 }
 
 .sustainability-insights {
@@ -526,6 +545,7 @@
   
   .chart-container {
     padding: 1rem;
+    min-height: 250px;
   }
   
   .charts-grid,
@@ -535,7 +555,8 @@
   }
   
   .status-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
   }
   
   .impact-item {
@@ -552,7 +573,8 @@
 /* Chart axis styling */
 .system-detail-page .tick text {
   font-size: 11px;
-  fill: #6b7b77;
+  fill: #666;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 .system-detail-page .domain {
@@ -563,4 +585,21 @@
 .system-detail-page .tick line {
   stroke: #e1e8e5;
   stroke-width: 1;
+}
+
+/* Grid lines */
+.system-detail-page .grid-line {
+  stroke: #f0f0f0;
+  stroke-width: 1;
+  stroke-dasharray: none;
+}
+
+/* Chart dots */
+.system-detail-page .dot {
+  transition: r 0.2s ease;
+}
+
+.system-detail-page .dot:hover {
+  r: 5;
+  cursor: pointer;
 }
