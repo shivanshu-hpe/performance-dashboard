@@ -1,0 +1,185 @@
+/* Insights Chart Overlay */
+.insights-chart-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.insights-chart-modal {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.insights-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  background: linear-gradient(135deg, #01A982 0%, #009B7A 100%);
+  color: white;
+  border-radius: 16px 16px 0 0;
+}
+
+.insights-chart-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.insights-chart-content {
+  padding: 25px;
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.insights-chart-content svg {
+  flex-shrink: 0;
+}
+
+.insights-summary {
+  flex: 1;
+  min-width: 200px;
+}
+
+.insights-summary h4 {
+  margin: 0 0 15px 0;
+  color: #37474f;
+  font-size: 16px;
+  font-weight: 700;
+  border-bottom: 2px solid #01A982;
+  padding-bottom: 8px;
+}
+
+.comparison-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stat-comparison {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background: #F8F9FA;
+  border-radius: 8px;
+  border-left: 4px solid #E0E0E0;
+}
+
+.metric-name {
+  font-weight: 600;
+  color: #37474f;
+  font-size: 13px;
+}
+
+.performance-indicator {
+  font-weight: 700;
+  font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.performance-indicator.better {
+  background: #E8F5E8;
+  color: #2E7D32;
+  border-left-color: #4CAF50;
+}
+
+.performance-indicator.worse {
+  background: #FFEBEE;
+  color: #C62828;
+  border-left-color: #F44336;
+}
+
+.stat-comparison:has(.performance-indicator.better) {
+  border-left-color: #4CAF50;
+}
+
+.stat-comparison:has(.performance-indicator.worse) {
+  border-left-color: #F44336;
+}
+
+/* Chart type toggle buttons */
+.chart-type-toggle {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 0 25px;
+}
+
+.chart-type-btn {
+  padding: 8px 16px;
+  border: 2px solid #01A982;
+  background: white;
+  color: #01A982;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.chart-type-btn.active,
+.chart-type-btn:hover {
+  background: #01A982;
+  color: white;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .insights-chart-modal {
+    width: 95%;
+    margin: 20px;
+  }
+  
+  .insights-chart-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .insights-chart-content svg {
+    width: 100%;
+    height: auto;
+  }
+  
+  .insights-chart-header {
+    padding: 15px 20px;
+  }
+  
+  .insights-chart-content {
+    padding: 20px;
+  }
+}

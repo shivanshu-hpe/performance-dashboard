@@ -1,0 +1,105 @@
+.performance-dashboard {
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.charts-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 30px;
+  align-items: start;
+}
+
+.chart-section {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.chart-section:last-child {
+  grid-column: 1 / -1;
+  justify-self: center;
+}
+
+.chart-section h3 {
+  margin: 0 0 15px 0;
+  color: #37474f;
+  font-size: 1.2em;
+  font-weight: 600;
+  border-bottom: 2px solid #4ECDC4;
+  padding-bottom: 8px;
+}
+
+.chart-description {
+  margin: 5px 0 15px 0;
+  color: #666;
+  font-size: 0.9em;
+  font-style: italic;
+}
+
+/* D3 Chart Styles */
+.axis {
+  font-size: 12px;
+}
+
+.axis text {
+  fill: #333;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #333;
+  shape-rendering: crispEdges;
+}
+
+.legend text {
+  font-size: 11px;
+  fill: #333;
+}
+
+/* Tooltip styles */
+.tooltip {
+  position: absolute;
+  text-align: center;
+  padding: 8px;
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .charts-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .chart-section:last-child {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .performance-dashboard {
+    padding: 15px;
+  }
+  
+  .chart-section {
+    padding: 15px;
+  }
+  
+  .chart-section svg {
+    max-width: 100%;
+    height: auto;
+  }
+}

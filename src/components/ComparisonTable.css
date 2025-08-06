@@ -1,0 +1,407 @@
+/* Comparison Tables Styles */
+.comparison-table {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+
+.comparison-table .table-header {
+  background: linear-gradient(135deg, #01A982 0%, #009B7A 100%);
+  color: white;
+  padding: 20px 25px;
+}
+
+.comparison-table .header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comparison-table .table-header h3 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.comparison-table .table-header p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.comparison-table .insights-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.comparison-table .insights-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Sustainability Table Specific Styles */
+.sustainability-table .table-header {
+  background: linear-gradient(135deg, #01A982 0%, #009B7A 100%);
+}
+
+.sustainability-table .score-fill.sustainability {
+  background: linear-gradient(90deg, #01A982, #00C49A);
+}
+
+.carbon-reduction {
+  text-align: center;
+}
+
+.carbon-reduction .percentage {
+  background: #E8F8F5;
+  color: #01A982;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* Performance Table Specific Styles */
+.performance-table .table-header {
+  background: linear-gradient(135deg, #01A982 0%, #009B7A 100%);
+}
+
+.performance-table .score-fill.performance {
+  background: linear-gradient(90deg, #01A982, #00C49A);
+}
+
+.performance-metric {
+  font-weight: 600;
+  color: #01A982;
+}
+
+.capacity {
+  font-weight: 600;
+  color: #01A982;
+}
+
+.latency-metric .low-latency {
+  color: #4CAF50;
+  font-weight: 700;
+}
+
+.latency-metric .medium-latency {
+  color: #FF9800;
+  font-weight: 600;
+}
+
+.latency-metric .high-latency {
+  color: #F44336;
+  font-weight: 600;
+}
+
+/* Feature Table Specific Styles */
+.feature-table .table-header {
+  background: linear-gradient(135deg, #01A982 0%, #009B7A 100%);
+}
+
+.feature-table .score-fill.feature {
+  background: linear-gradient(90deg, #01A982, #00C49A);
+}
+
+.data-reduction-badge {
+  background: #E8F8F5;
+  color: #01A982;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.feature-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.feature-badge.available {
+  background: #E8F8F5;
+  color: #01A982;
+}
+
+.feature-badge.optional {
+  background: #FFF3E0;
+  color: #009B7A;
+}
+
+.feature-badge.unavailable {
+  background: #FFEBEE;
+  color: #C62828;
+}
+
+.protocols {
+  max-width: 200px;
+}
+
+.protocol-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.protocol-tag {
+  background: #E8F8F5;
+  color: #01A982;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.deployment-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.deployment-badge.cloud_managed {
+  background: #E8F8F5;
+  color: #01A982;
+}
+
+.deployment-badge.on_premises {
+  background: #E8F8F5;
+  color: #009B7A;
+}
+
+/* Common table styles for comparison tables */
+.comparison-table .table-container {
+  overflow-x: auto;
+}
+
+.comparison-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.comparison-table th {
+  padding: 15px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #37474f;
+  white-space: nowrap;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: #F8F9FA;
+  border-bottom: 2px solid #E0E0E0;
+}
+
+.comparison-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+
+.comparison-table th.sortable:hover {
+  background: #E8F5F1;
+  color: #01A982;
+}
+
+.comparison-table th.sortable.active {
+  background: #01A982;
+  color: white;
+  font-weight: 700;
+}
+
+/* Sort icon styling for comparison tables */
+.comparison-table th.sortable span.sort-icon {
+  font-size: 10px;
+  margin-left: 4px;
+  opacity: 0.6;
+}
+
+.comparison-table th.sortable:hover span.sort-icon,
+.comparison-table th.sortable.active span.sort-icon {
+  opacity: 1;
+}
+
+.comparison-table td {
+  padding: 12px;
+  border-bottom: 1px solid #E8E8E8;
+  vertical-align: middle;
+}
+
+.comparison-table .device-row:hover {
+  background-color: #F8F9FA;
+}
+
+.comparison-table .device-name {
+  font-weight: 600;
+  color: #37474f;
+  min-width: 200px;
+}
+
+.comparison-table .device-name-link {
+  background: none;
+  border: none;
+  color: #01A982;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 0;
+  text-align: left;
+  transition: color 0.2s ease;
+}
+
+.comparison-table .device-name-link:hover {
+  color: #009B7A;
+  text-decoration: underline;
+}
+
+.comparison-table .score-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 100px;
+}
+
+.comparison-table .score {
+  font-weight: 700;
+  font-size: 14px;
+  min-width: 25px;
+}
+
+.comparison-table .score-bar {
+  flex: 1;
+  height: 8px;
+  background-color: #E0E0E0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.comparison-table .score-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.comparison-table .score.excellent,
+.comparison-table .score-fill.excellent {
+  color: #4ECDC4;
+}
+
+.comparison-table .score.good,
+.comparison-table .score-fill.good {
+  color: #45B7AA;
+}
+
+.comparison-table .score.average,
+.comparison-table .score-fill.average {
+  color: #FFA726;
+}
+
+.comparison-table .score.poor,
+.comparison-table .score-fill.poor {
+  color: #EF5350;
+}
+
+/* Comparison-based colors for all comparison tables */
+.comparison-table .score.above-average {
+  background: #E8F8F5;
+  color: #01A982;
+  font-weight: 700;
+}
+
+.comparison-table .score.average {
+  background: #FFF3E0;
+  color: #FF9800;
+  font-weight: 600;
+}
+
+.comparison-table .score.below-average {
+  background: #FFEBEE;
+  color: #F44336;
+  font-weight: 600;
+}
+
+.comparison-table .score-fill.above-average {
+  background: linear-gradient(90deg, #01A982, #00C49A);
+}
+
+.comparison-table .score-fill.average {
+  background: linear-gradient(90deg, #FF9800, #FFB74D);
+}
+
+.comparison-table .score-fill.below-average {
+  background: linear-gradient(90deg, #F44336, #EF5350);
+}
+
+.comparison-table .table-summary {
+  background: #F8F9FA;
+  padding: 20px 25px;
+  border-top: 1px solid #E0E0E0;
+}
+
+.comparison-table .summary-stats {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.comparison-table .stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.comparison-table .stat-label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.comparison-table .stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #01A982;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .comparison-table .summary-stats {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .comparison-table th,
+  .comparison-table td {
+    padding: 8px 6px;
+    font-size: 12px;
+  }
+  
+  .comparison-table .device-name {
+    min-width: 150px;
+  }
+  
+  .comparison-table .protocol-list {
+    flex-direction: column;
+  }
+}

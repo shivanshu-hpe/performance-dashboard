@@ -1,0 +1,566 @@
+/* System Detail Page Styles */
+.system-detail-page {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: #f8faf9;
+  min-height: 100vh;
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e1e8e5;
+}
+
+.back-button {
+  background: #01A982;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.back-button:hover {
+  background: #00854C;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(1, 169, 130, 0.3);
+}
+
+.system-info h1 {
+  margin: 0;
+  color: #2c3e3a;
+  font-size: 2.2rem;
+  font-weight: 600;
+}
+
+.system-meta {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.system-type,
+.system-tier,
+.system-capacity {
+  background: #e8f5f1;
+  color: #01A982;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.detail-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e1e8e5;
+}
+
+.tab {
+  background: transparent;
+  border: none;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #6b7b77;
+  transition: all 0.3s ease;
+}
+
+.tab:hover {
+  color: #01A982;
+  background: #f0f8f5;
+}
+
+.tab.active {
+  color: #01A982;
+  border-bottom-color: #01A982;
+  background: #f0f8f5;
+}
+
+.detail-content {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Overview Tab */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+}
+
+.overview-card {
+  background: #f8faf9;
+  border: 1px solid #e1e8e5;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.overview-card h3 {
+  margin: 0 0 1rem 0;
+  color: #2c3e3a;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e8f0ed;
+}
+
+.metric-row:last-child {
+  border-bottom: none;
+}
+
+.metric-value {
+  font-weight: 600;
+  color: #01A982;
+}
+
+/* Features Tab */
+.feature-analysis h2 {
+  margin: 0 0 2rem 0;
+  color: #2c3e3a;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+.feature-section h3 {
+  margin: 0 0 1.5rem 0;
+  color: #2c3e3a;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.feature-item {
+  border: 2px solid #e1e8e5;
+  border-radius: 12px;
+  padding: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.feature-item.available {
+  border-color: #4ECDC4;
+  background: #f0fcfb;
+}
+
+.feature-item.unavailable {
+  border-color: #ff6b6b;
+  background: #fff5f5;
+}
+
+.feature-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.feature-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.feature-icon.available {
+  background: #4ECDC4;
+  color: white;
+}
+
+.feature-icon.unavailable {
+  background: #ff6b6b;
+  color: white;
+}
+
+.feature-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #2c3e3a;
+}
+
+.feature-description {
+  margin: 0;
+  color: #6b7b77;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Metrics Tab */
+.metrics-header,
+.performance-tab .metrics-header,
+.sustainability-tab .metrics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.metrics-header h2,
+.performance-tab .metrics-header h2,
+.sustainability-tab .metrics-header h2 {
+  margin: 0;
+  color: #2c3e3a;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.time-range-selector {
+  display: flex;
+  gap: 0.5rem;
+  background: #f1f5f3;
+  border-radius: 8px;
+  padding: 0.3rem;
+}
+
+.time-btn {
+  background: transparent;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #6b7b77;
+  transition: all 0.3s ease;
+}
+
+.time-btn:hover {
+  background: #e1f0eb;
+  color: #01A982;
+}
+
+.time-btn.active {
+  background: #01A982;
+  color: white;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+/* Performance tab specific grid layout */
+.performance-tab .charts-grid {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.chart-container {
+  background: #fafcfb;
+  border: 1px solid #e8f0ed;
+  border-radius: 12px;
+  padding: 1.5rem;
+  overflow-x: auto;
+}
+
+.chart-container h5 {
+  margin: 0 0 1rem 0;
+  color: #2c3e3a;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  border-bottom: 1px solid #e1e8e5;
+  padding-bottom: 0.5rem;
+}
+
+.chart-container svg {
+  width: 100%;
+  height: auto;
+}
+
+.metrics-summary {
+  background: #f8faf9;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #e1e8e5;
+}
+
+.summary-card h4 {
+  margin: 0 0 1rem 0;
+  color: #2c3e3a;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.status-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.status-label {
+  font-size: 0.9rem;
+  color: #6b7b77;
+  font-weight: 500;
+}
+
+.status-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #01A982;
+}
+
+/* Sustainability Tab Specific Styles */
+.sustainability-summary {
+  background: #f8faf9;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #e1e8e5;
+  margin-bottom: 2rem;
+}
+
+.sustainability-insights {
+  margin-top: 2rem;
+}
+
+.insight-card {
+  background: white;
+  border: 1px solid #e1e8e5;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.insight-card h4 {
+  margin: 0 0 1.5rem 0;
+  color: #2c3e3a;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.impact-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.impact-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f0f8f5;
+  border-radius: 8px;
+  border-left: 4px solid #01A982;
+}
+
+.impact-icon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: white;
+  border-radius: 50%;
+  border: 2px solid #01A982;
+}
+
+.impact-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.impact-title {
+  font-weight: 600;
+  color: #2c3e3a;
+  font-size: 1rem;
+}
+
+.impact-value {
+  color: #01A982;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Chart Tooltip */
+.chart-tooltip {
+  position: absolute;
+  background: rgba(44, 62, 58, 0.95);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  pointer-events: none;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.tooltip-header {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #4ECDC4;
+  border-bottom: 1px solid rgba(78, 205, 196, 0.3);
+  padding-bottom: 0.3rem;
+}
+
+.tooltip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.tooltip-label {
+  color: #a8b8b4;
+}
+
+.tooltip-value {
+  color: white;
+  font-weight: 500;
+}
+
+/* Error State */
+.error-state {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.error-state h2 {
+  color: #2c3e3a;
+  margin-bottom: 1rem;
+}
+
+.error-state p {
+  color: #6b7b77;
+  margin-bottom: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .system-detail-page {
+    padding: 1rem;
+  }
+  
+  .detail-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .system-info h1 {
+    font-size: 1.8rem;
+  }
+  
+  .detail-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+  
+  .tab {
+    white-space: nowrap;
+    padding: 0.75rem 1.5rem;
+  }
+  
+  .metrics-header,
+  .performance-tab .metrics-header,
+  .sustainability-tab .metrics-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .chart-container {
+    padding: 1rem;
+  }
+  
+  .charts-grid,
+  .performance-tab .charts-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .impact-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  
+  .impact-content {
+    align-items: center;
+  }
+}
+
+/* Chart axis styling */
+.system-detail-page .tick text {
+  font-size: 11px;
+  fill: #6b7b77;
+}
+
+.system-detail-page .domain {
+  stroke: #e1e8e5;
+  stroke-width: 1;
+}
+
+.system-detail-page .tick line {
+  stroke: #e1e8e5;
+  stroke-width: 1;
+}

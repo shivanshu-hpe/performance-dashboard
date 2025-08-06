@@ -1,0 +1,149 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue', sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+}
+
+.app {
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.app-main {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* HPE Branding */
+.app-header {
+  background: linear-gradient(135deg, #01A982 0%, #00854C 100%);
+  color: white;
+  padding: 1rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 10px rgba(1, 169, 130, 0.2);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.hpe-branding {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hpe-logo {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+
+.header-title {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.header-subtitle {
+  margin: 0;
+  font-size: 1rem;
+  opacity: 0.9;
+  font-weight: 300;
+}
+
+.header-meta {
+  text-align: right;
+}
+
+.header-meta p {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .header-meta {
+    text-align: center;
+  }
+  
+  .header-title {
+    font-size: 1.5rem;
+  }
+  
+  .hpe-logo {
+    font-size: 1.8rem;
+  }
+}
+
+.app-main {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .app {
+    padding: 15px;
+  }
+  
+  .app-header {
+    padding: 30px 15px;
+    margin-bottom: 30px;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+  
+  .app-header h1 {
+    font-size: 2em;
+  }
+  
+  .app-header p {
+    font-size: 1.1em;
+  }
+  
+  .logo-text {
+    font-size: 2.5em;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header h1 {
+    font-size: 1.8em;
+  }
+  
+  .app-header p {
+    font-size: 1em;
+  }
+  
+  .logo-text {
+    font-size: 2em;
+  }
+}
