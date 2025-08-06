@@ -56,7 +56,7 @@ const PerformanceDashboard = ({ devices, onDeviceSelect }) => {
 
     const color = d3.scaleOrdinal()
       .domain(metrics)
-      .range(['#4ECDC4', '#45B7AA', '#3DA58A']);
+      .range(['#01A982', '#45B7AA', '#3DA58A']);
 
     // X axis
     g.append("g")
@@ -194,7 +194,7 @@ const PerformanceDashboard = ({ devices, onDeviceSelect }) => {
     });
 
     // Create radar areas for each device
-    const colors = ['#4ECDC4', '#45B7AA', '#3DA58A', '#36967D', '#2E8570'];
+    const colors = ['#01A982', '#45B7AA', '#3DA58A', '#36967D', '#2E8570'];
     
     devices.forEach((device, deviceIndex) => {
       const data = metrics.map((metric, i) => {
@@ -279,7 +279,7 @@ const PerformanceDashboard = ({ devices, onDeviceSelect }) => {
 
     const color = d3.scaleOrdinal()
       .domain(devices.map(d => d.type))
-      .range(['#4ECDC4', '#45B7AA', '#3DA58A', '#36967D', '#2E8570']);
+      .range(['#01A982', '#45B7AA', '#3DA58A', '#36967D', '#2E8570']);
 
     // X axis
     g.append("g")

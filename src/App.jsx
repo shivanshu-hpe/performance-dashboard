@@ -1,216 +1,149 @@
-import React, { useState } from 'react'
-import './App.css'
-import StorageDeviceTable from './components/StorageDeviceTable'
-import SustainabilityTable from './components/SustainabilityTable'
-import PerformanceTable from './components/PerformanceTable'
-import FeatureTable from './components/FeatureTable'
-import SystemDetailPage from './components/SystemDetailPage'
+import React, { useState, useEffect } from 'react';
+import './App.css';
+import StorageDeviceTable from './components/StorageDeviceTable';
+import SustainabilityTable from './components/SustainabilityTable';
+import PerformanceTable from './components/PerformanceTable';
+import FeatureTable from './components/FeatureTable';
+import SystemDetailPage from './components/SystemDetailPage';
+import DashboardSummary from './components/DashboardSummary';
+import StorageApiService from './services/StorageApiService';
+import { Refresh } from 'grommet-icons';
+import { Grommet, Card, CardBody, Main } from 'grommet';
 
-// Mock data for HPE storage products - focusing on HPE GreenLake for File Storage
-const mockHPEStorageData = [
-  {
-    id: 1,
-    name: "HPE GreenLake for File Storage - Enterprise",
-    productLine: "HPE GreenLake",
-    type: "File Storage",
-    tier: "Enterprise",
-    capacity: "100TB",
-    readSpeed: 6500,
-    writeSpeed: 4800,
-    iops: 850000,
-    latency: 0.12,
-    price: 15000,
-    score: 94,
-    greenScore: 92,
-    featureScore: 88,
-    dataReduction: "5:1",
-    snapshots: "Yes",
-    replication: "Yes",
-    protocols: ["NFS", "SMB", "S3"],
-    deployment: "Cloud-managed",
-    sustainability: {
-      powerEfficiency: 92,
-      carbonReduction: 35
-    }
+const hpeTheme = {
+  global: {
+    colors: {
+      brand: '#01A982',
+      'accent-1': '#00854C',
+      background: '#f5f7fa',
+      'background-back': '#ffffff',
+      'background-front': '#ffffff',
+      'background-contrast': '#ffffff',
+      text: '#333333',
+      'text-strong': '#000000',
+      'text-weak': '#666666',
+      'text-xweak': '#999999',
+      border: '#e0e0e0',
+      control: 'brand',
+      'active-background': 'background-contrast',
+      'active-text': 'text-strong',
+      'selected-background': 'brand',
+      'selected-text': 'text-strong',
+      'status-critical': '#d32f2f',
+      'status-error': '#d32f2f',
+      'status-warning': '#ff9500',
+      'status-ok': '#01A982',
+      'status-unknown': '#666666',
+      'status-disabled': '#cccccc',
+    },
+    font: {
+      family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
+      size: '14px',
+      height: '20px',
+    },
+    elevation: {
+      light: {
+        small: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        medium: '0 4px 8px rgba(0, 0, 0, 0.12)',
+        large: '0 8px 16px rgba(0, 0, 0, 0.15)',
+      },
+    },
   },
-  {
-    id: 2,
-    name: "HPE GreenLake for File Storage - Standard",
-    productLine: "HPE GreenLake",
-    type: "File Storage",
-    tier: "Standard",
-    capacity: "50TB",
-    readSpeed: 4200,
-    writeSpeed: 3800,
-    iops: 650000,
-    latency: 0.18,
-    price: 8500,
-    score: 87,
-    greenScore: 89,
-    featureScore: 85,
-    dataReduction: "4:1",
-    snapshots: "Yes",
-    replication: "Yes",
-    protocols: ["NFS", "SMB"],
-    deployment: "Cloud-managed",
-    sustainability: {
-      powerEfficiency: 88,
-      carbonReduction: 30
-    }
+  card: {
+    container: {
+      background: 'background-back',
+      elevation: 'small',
+      extend: {
+        borderRadius: '8px',
+        overflow: 'hidden',
+      },
+    },
   },
-  {
-    id: 3,
-    name: "HPE GreenLake for File Storage - Basic",
-    productLine: "HPE GreenLake",
-    type: "File Storage",
-    tier: "Basic",
-    capacity: "25TB",
-    readSpeed: 2800,
-    writeSpeed: 2400,
-    iops: 420000,
-    latency: 0.25,
-    price: 4500,
-    score: 78,
-    greenScore: 84,
-    featureScore: 75,
-    dataReduction: "3:1",
-    snapshots: "Yes",
-    replication: "Optional",
-    protocols: ["NFS", "SMB"],
-    deployment: "Cloud-managed",
-    sustainability: {
-      powerEfficiency: 82,
-      carbonReduction: 25
-    }
-  },
-  {
-    id: 4,
-    name: "HPE Alletra 6000 File Storage",
-    productLine: "HPE Alletra",
-    type: "File Storage",
-    tier: "High-Performance",
-    capacity: "200TB",
-    readSpeed: 8500,
-    writeSpeed: 6200,
-    iops: 1200000,
-    latency: 0.08,
-    price: 28000,
-    score: 96,
-    greenScore: 94,
-    featureScore: 92,
-    dataReduction: "6:1",
-    snapshots: "Yes",
-    replication: "Yes",
-    protocols: ["NFS", "SMB", "S3", "iSCSI"],
-    deployment: "On-premises",
-    sustainability: {
-      powerEfficiency: 95,
-      carbonReduction: 40
-    }
-  },
-  {
-    id: 5,
-    name: "HPE Alletra 9000 File Storage",
-    productLine: "HPE Alletra",
-    type: "File Storage",
-    tier: "Mission-Critical",
-    capacity: "500TB",
-    readSpeed: 12000,
-    writeSpeed: 8500,
-    iops: 1800000,
-    latency: 0.05,
-    price: 65000,
-    score: 98,
-    greenScore: 96,
-    featureScore: 95,
-    dataReduction: "8:1",
-    snapshots: "Yes",
-    replication: "Yes",
-    protocols: ["NFS", "SMB", "S3", "iSCSI", "FC"],
-    deployment: "On-premises",
-    sustainability: {
-      powerEfficiency: 98,
-      carbonReduction: 45
-    }
-  },
-  {
-    id: 6,
-    name: "HPE Primera File Services",
-    productLine: "HPE Primera",
-    type: "File Storage",
-    tier: "Mission-Critical",
-    capacity: "1PB",
-    readSpeed: 15000,
-    writeSpeed: 11000,
-    iops: 2200000,
-    latency: 0.03,
-    price: 120000,
-    score: 99,
-    greenScore: 98,
-    featureScore: 97,
-    dataReduction: "10:1",
-    snapshots: "Yes",
-    replication: "Yes",
-    protocols: ["NFS", "SMB", "S3", "iSCSI", "FC", "NVMe-oF"],
-    deployment: "On-premises",
-    sustainability: {
-      powerEfficiency: 99,
-      carbonReduction: 50
-    }
-  }
-];
-
-// HPE Industry Average Benchmarks for comparison
-const hpeBenchmarkData = {
-  overview: {
-    deviceScore: 85,
-    score: 82,
-    hpePerformanceScore: 88
-  },
-  sustainability: {
-    greenScore: 78,
-    powerEfficiency: 75,
-    carbonReduction: 25
-  },
-  performance: {
-    score: 82,
-    readSpeed: 3500,
-    writeSpeed: 2800,
-    iops: 400000,
-    latency: 0.25
-  },
-  features: {
-    featureScore: 80,
-    dataReductionRatio: 3.5,
-    protocolsSupported: 3.2
-  }
 };
 
 function App() {
-  // Calculate overall device score for each device
-  const enrichedData = mockHPEStorageData.map(device => ({
-    ...device,
-    deviceScore: Math.round((device.score + device.greenScore + device.featureScore) / 3)
-  }));
+  // Main state for data
+  const [data, setData] = useState([]);
+  const [sustainabilityData, setSustainabilityData] = useState([]);
+  const [performanceData, setPerformanceData] = useState([]);
+  const [featureData, setFeatureData] = useState([]);
+  
+  // Loading and error states
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // UI state
+  const [selectedDevice, setSelectedDevice] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ key: 'deviceScore', direction: 'desc' });
 
-  // Calculate averages from the mock data
+  // Load all data from API or mock
+  const loadAllData = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      console.log('🔄 Loading storage data...');
+      
+      // Load all data in parallel for better performance
+      const [devices, sustainability, performance, features] = await Promise.all([
+        StorageApiService.getStorageDevices(),
+        StorageApiService.getSustainabilityMetrics(),
+        StorageApiService.getPerformanceMetrics(),
+        StorageApiService.getFeatureComparison()
+      ]);
+
+      console.log('✅ Data loaded successfully:', {
+        devices: devices.length,
+        sustainability: sustainability.length,
+        performance: performance.length,
+        features: features.length
+      });
+
+      setData(devices);
+      setSustainabilityData(sustainability);
+      setPerformanceData(performance);
+      setFeatureData(features);
+
+    } catch (err) {
+      console.error('❌ Failed to load data:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Load data on component mount
+  useEffect(() => {
+    loadAllData();
+  }, []);
+
+  // Calculate totals for the averages
   const calculateAverages = (data) => {
+    if (!data || data.length === 0) return null;
+    
     const totals = data.reduce((acc, device) => {
-      acc.deviceScore += device.deviceScore;
-      acc.score += device.score;
-      acc.greenScore += device.greenScore;
-      acc.featureScore += device.featureScore;
-      acc.readSpeed += device.readSpeed;
-      acc.writeSpeed += device.writeSpeed;
-      acc.iops += device.iops;
-      acc.latency += device.latency;
-      acc.powerEfficiency += device.sustainability.powerEfficiency;
-      acc.carbonReduction += device.sustainability.carbonReduction;
+      acc.deviceScore += device.deviceScore || device.score || 0;
+      acc.score += device.score || 0;
+      acc.greenScore += device.greenScore || 0;
+      acc.featureScore += device.featureScore || 0;
+      acc.readSpeed += device.readSpeed || 0;
+      acc.writeSpeed += device.writeSpeed || 0;
+      acc.iops += device.iops || 0;
+      acc.latency += device.latency || 0;
+      acc.powerEfficiency += device.sustainability?.powerEfficiency || 0;
+      acc.carbonReduction += device.sustainability?.carbonReduction || 0;
       return acc;
     }, {
-      deviceScore: 0, score: 0, greenScore: 0, featureScore: 0,
-      readSpeed: 0, writeSpeed: 0, iops: 0, latency: 0,
-      powerEfficiency: 0, carbonReduction: 0
+      deviceScore: 0,
+      score: 0,
+      greenScore: 0,
+      featureScore: 0,
+      readSpeed: 0,
+      writeSpeed: 0,
+      iops: 0,
+      latency: 0,
+      powerEfficiency: 0,
+      carbonReduction: 0
     });
 
     const count = data.length;
@@ -222,226 +155,184 @@ function App() {
       readSpeed: Math.round(totals.readSpeed / count),
       writeSpeed: Math.round(totals.writeSpeed / count),
       iops: Math.round(totals.iops / count),
-      latency: Number((totals.latency / count).toFixed(2)),
-      sustainability: {
-        powerEfficiency: Math.round(totals.powerEfficiency / count),
-        carbonReduction: Math.round(totals.carbonReduction / count)
-      }
+      latency: parseFloat((totals.latency / count).toFixed(2)),
+      powerEfficiency: Math.round(totals.powerEfficiency / count),
+      carbonReduction: Math.round(totals.carbonReduction / count)
     };
   };
 
+  // Enriched data with device scores
+  const enrichedData = data.map(device => ({
+    ...device,
+    deviceScore: device.deviceScore || device.score || 0
+  }));
+
+  // Calculate averages for display
   const averageData = calculateAverages(enrichedData);
-  
-  const [hpeStorageData, setHpeStorageData] = useState(enrichedData);
-  const [sortConfig, setSortConfig] = useState({ key: 'deviceScore', direction: 'desc' });
-  const [selectedSystem, setSelectedSystem] = useState(null);
 
-  // Sort the data based on current sort configuration
-  const sortedData = React.useMemo(() => {
-    let sortableData = [...hpeStorageData];
-    if (sortConfig.key) {
-      sortableData.sort((a, b) => {
-        // Handle nested properties like sustainability.powerEfficiency
-        const getNestedValue = (obj, path) => {
-          return path.split('.').reduce((value, key) => value && value[key], obj);
-        };
-        
-        const aValue = getNestedValue(a, sortConfig.key);
-        const bValue = getNestedValue(b, sortConfig.key);
-        
-        if (typeof aValue === 'number' && typeof bValue === 'number') {
-          if (sortConfig.direction === 'asc') {
-            return aValue - bValue;
-          }
-          return bValue - aValue;
-        }
-        
-        if (sortConfig.direction === 'asc') {
-          return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
-        }
-        return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
-      });
-    }
-    return sortableData;
-  }, [hpeStorageData, sortConfig]);
-
+  // Sorting functionality
   const handleSort = (key) => {
-    let direction = 'desc';
-    if (sortConfig.key === key && sortConfig.direction === 'desc') {
-      direction = 'asc';
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
     }
     setSortConfig({ key, direction });
   };
 
-  const handleViewDetails = (system) => {
-    setSelectedSystem(system);
-  };
-
-  const handleBackToList = () => {
-    setSelectedSystem(null);
-  };
-
-  const handleViewInsights = (tableType) => {
-    const avgData = calculateTableAverages(sortedData);
-    const metrics = getMetricsForTable(tableType);
+  // Sort data based on current sort configuration
+  const sortedData = [...enrichedData].sort((a, b) => {
+    if (!sortConfig.key) return 0;
     
-    setInsightsView(tableType);
-    setInsightsData({
-      averageData: avgData,
-      hpeBenchmark: hpeBenchmarkData[tableType],
-      metrics: metrics
-    });
-  };
-
-  const handleCloseInsights = () => {
-    setInsightsView(null);
-    setInsightsData(null);
-  };
-
-  const calculateTableAverages = (data) => {
-    const totals = data.reduce((acc, device) => {
-      acc.deviceScore += device.deviceScore;
-      acc.score += device.score;
-      acc.greenScore += device.greenScore;
-      acc.featureScore += device.featureScore;
-      acc.readSpeed += device.readSpeed;
-      acc.writeSpeed += device.writeSpeed;
-      acc.iops += device.iops;
-      acc.latency += device.latency;
-      acc.powerEfficiency += device.sustainability.powerEfficiency;
-      acc.carbonReduction += device.sustainability.carbonReduction;
-      return acc;
-    }, {
-      deviceScore: 0, score: 0, greenScore: 0, featureScore: 0,
-      readSpeed: 0, writeSpeed: 0, iops: 0, latency: 0,
-      powerEfficiency: 0, carbonReduction: 0
-    });
-
-    const count = data.length;
-    return {
-      deviceScore: Math.round(totals.deviceScore / count),
-      score: Math.round(totals.score / count),
-      greenScore: Math.round(totals.greenScore / count),
-      featureScore: Math.round(totals.featureScore / count),
-      readSpeed: Math.round(totals.readSpeed / count),
-      writeSpeed: Math.round(totals.writeSpeed / count),
-      iops: Math.round(totals.iops / count),
-      latency: (totals.latency / count).toFixed(2),
-      sustainability: {
-        powerEfficiency: Math.round(totals.powerEfficiency / count),
-        carbonReduction: Math.round(totals.carbonReduction / count)
-      }
-    };
-  };
-
-  const getMetricsForTable = (tableType) => {
-    switch (tableType) {
-      case 'overview':
-        return [
-          { label: 'Device Score', getValue: (data) => data.deviceScore, unit: '/100' },
-          { label: 'Performance Score', getValue: (data) => data.score, unit: '/100' },
-          { label: 'Performance Score', getValue: (data) => data.hpePerformanceScore || data.score, unit: '/100' }
-        ];
-      case 'sustainability':
-        return [
-          { label: 'Green Score', getValue: (data) => data.greenScore, unit: '/100' },
-          { label: 'Power Efficiency', getValue: (data) => data.powerEfficiency || data.sustainability?.powerEfficiency, unit: '/100' },
-          { label: 'Carbon Reduction', getValue: (data) => data.carbonReduction || data.sustainability?.carbonReduction, unit: '%' }
-        ];
-      case 'performance':
-        return [
-          { label: 'Performance Score', getValue: (data) => data.score, unit: '/100' },
-          { label: 'Read Speed', getValue: (data) => data.readSpeed, unit: ' MB/s' },
-          { label: 'Write Speed', getValue: (data) => data.writeSpeed, unit: ' MB/s' },
-          { label: 'IOPS', getValue: (data) => data.iops, unit: '' },
-          { label: 'Latency', getValue: (data) => parseFloat(data.latency), unit: ' ms', inverted: true }
-        ];
-      case 'features':
-        return [
-          { label: 'Feature Score', getValue: (data) => data.featureScore, unit: '/100' },
-          { label: 'Data Reduction', getValue: (data) => data.dataReductionRatio || 3.5, unit: ':1' },
-          { label: 'Protocols Supported', getValue: (data) => data.protocolsSupported || 3.2, unit: '' }
-        ];
-      default:
-        return [];
+    const aValue = a[sortConfig.key];
+    const bValue = b[sortConfig.key];
+    
+    if (aValue < bValue) {
+      return sortConfig.direction === 'asc' ? -1 : 1;
     }
+    if (aValue > bValue) {
+      return sortConfig.direction === 'asc' ? 1 : -1;
+    }
+    return 0;
+  });
+
+  // View details handler
+  const handleViewDetails = (device) => {
+    setSelectedDevice(device);
   };
 
-  // If a system is selected, show the detail page
-  if (selectedSystem) {
+  // Close details handler
+  const handleCloseDetails = () => {
+    setSelectedDevice(null);
+  };
+
+  // Show detailed view if device is selected
+  if (selectedDevice) {
+    return (
+      <SystemDetailPage 
+        device={selectedDevice} 
+        onClose={handleCloseDetails}
+      />
+    );
+  }
+
+  // Loading state
+  if (loading) {
     return (
       <div className="app">
-        <header className="app-header">
+        <header className="header">
           <div className="header-content">
-            <div className="hpe-branding">
-              <span className="hpe-logo">HPE</span>
-              <div className="header-text">
-                <h1 className="header-title">HPE Storage Performance Dashboard</h1>
-                <p className="header-subtitle">Detailed analysis of {selectedSystem.name}</p>
-              </div>
+            <div className="logo">
+              <span className="hpe-text">HPE</span>
+              <span className="storage-text">Storage Performance Dashboard</span>
             </div>
           </div>
         </header>
-        
-        <main className="app-main">
-          <SystemDetailPage 
-            system={selectedSystem} 
-            onBack={handleBackToList}
-          />
+        <main className="main-content">
+          <div className="loading-state">
+            <div className="loading-spinner"></div>
+            <p>Loading storage data...</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="app">
+        <header className="header">
+          <div className="header-content">
+            <div className="logo">
+              <span className="hpe-text">HPE</span>
+              <span className="storage-text">Storage Performance Dashboard</span>
+            </div>
+          </div>
+        </header>
+        <main className="main-content">
+          <div className="error-state">
+            <h2>Error Loading Data</h2>
+            <p>{error}</p>
+            <button onClick={loadAllData} className="retry-button">
+              Retry
+            </button>
+          </div>
         </main>
       </div>
     );
   }
 
   return (
-    <div className="app">
-      <header className="app-header">
-        <div className="header-content">
-          <div className="hpe-branding">
-            <span className="hpe-logo">HPE</span>
-            <div className="header-text">
-              <h1 className="header-title">HPE Storage Performance Dashboard</h1>
-              <p className="header-subtitle">Comprehensive analysis and comparison of HPE storage solutions</p>
+    <Grommet theme={hpeTheme}>
+      <div className="app">
+        <header className="header">
+          <div className="header-content">
+            <div className="logo">
+              <span className="hpe-text">HPE</span>
+              <span className="storage-text">Storage Performance Dashboard</span>
+            </div>
+            <div className="header-controls">
+              <button onClick={loadAllData} className="refresh-button" title="Refresh Data">
+                <Refresh size="16px" />
+              </button>
             </div>
           </div>
-        </div>
-      </header>
-      
-      <main className="app-main">
-        <StorageDeviceTable 
-          devices={sortedData}
-          onSort={handleSort}
-          sortConfig={sortConfig}
-          onViewDetails={handleViewDetails}
-          averageData={averageData}
-        />
-        
-        <SustainabilityTable 
-          devices={sortedData}
-          onSort={handleSort}
-          sortConfig={sortConfig}
-          onViewDetails={handleViewDetails}
-          averageData={averageData}
-        />
-        
-        <PerformanceTable 
-          devices={sortedData}
-          onSort={handleSort}
-          sortConfig={sortConfig}
-          onViewDetails={handleViewDetails}
-          averageData={averageData}
-        />
-        
-        <FeatureTable 
-          devices={sortedData}
-          onSort={handleSort}
-          sortConfig={sortConfig}
-          onViewDetails={handleViewDetails}
-          averageData={averageData}
-        />
-      </main>
-    </div>
-  )
+        </header>
+
+        <Main className="main-content" background="background">
+          <DashboardSummary devices={enrichedData} />
+          
+          <Card margin={{ vertical: 'medium' }} elevation="small">
+            <CardBody pad="medium">
+              <StorageDeviceTable 
+                devices={sortedData}
+                onSort={handleSort}
+                sortConfig={sortConfig}
+                onViewDetails={handleViewDetails}
+                averageData={averageData}
+              />
+            </CardBody>
+          </Card>
+          
+          <Card margin={{ vertical: 'medium' }} elevation="small">
+            <CardBody pad="medium">
+              <SustainabilityTable 
+                devices={sustainabilityData.length > 0 ? sustainabilityData : sortedData}
+                onSort={handleSort}
+                sortConfig={sortConfig}
+                onViewDetails={handleViewDetails}
+                averageData={averageData}
+              />
+            </CardBody>
+          </Card>
+          
+          <Card margin={{ vertical: 'medium' }} elevation="small">
+            <CardBody pad="medium">
+              <PerformanceTable 
+                devices={performanceData.length > 0 ? performanceData : sortedData}
+                onSort={handleSort}
+                sortConfig={sortConfig}
+                onViewDetails={handleViewDetails}
+                averageData={averageData}
+              />
+            </CardBody>
+          </Card>
+          
+          <Card margin={{ vertical: 'medium' }} elevation="small">
+            <CardBody pad="medium">
+              <FeatureTable 
+                devices={featureData.length > 0 ? featureData : sortedData}
+                onSort={handleSort}
+                sortConfig={sortConfig}
+                onViewDetails={handleViewDetails}
+                averageData={averageData}
+              />
+            </CardBody>
+          </Card>
+        </Main>
+      </div>
+    </Grommet>
+  );
 }
 
-export default App
+export default App;

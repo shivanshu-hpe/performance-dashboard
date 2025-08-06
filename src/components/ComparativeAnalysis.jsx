@@ -188,7 +188,7 @@ const ComparativeAnalysis = ({ selectedDevices }) => {
                   <div className="metric-bar">
                     <span className="metric-label">Read: {item.readSpeed} MB/s</span>
                     <div className="bar-container">
-                      <div className="bar-fill" style={{ width: `${item.readSpeedPercent}%`, backgroundColor: '#4ECDC4' }}></div>
+                      <div className="bar-fill" style={{ width: `${item.readSpeedPercent}%`, backgroundColor: '#01A982' }}></div>
                     </div>
                   </div>
                   <div className="metric-bar">

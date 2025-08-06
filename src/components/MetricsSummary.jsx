@@ -91,7 +91,7 @@ const MetricsSummary = ({ devices, selectedDevices }) => {
             <div className="mini-bar">
               <div 
                 className="mini-bar-fill" 
-                style={{ width: `${metrics.avgScore}%`, backgroundColor: '#4ECDC4' }}
+                style={{ width: `${metrics.avgScore}%`, backgroundColor: '#01A982' }}
               ></div>
             </div>
           </div>

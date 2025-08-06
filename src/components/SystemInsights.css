@@ -69,8 +69,8 @@
 .input-group input:focus,
 .input-group select:focus {
   outline: none;
-  border-color: #4ECDC4;
-  box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.2);
+  border-color: #01A982;
+  box-shadow: 0 0 0 2px rgba(1, 169, 130, 0.2);
 }
 
 /* Systems Grid */
@@ -94,7 +94,7 @@
   align-items: center;
   margin-bottom: 24px;
   padding-bottom: 16px;
-  border-bottom: 2px solid #4ECDC4;
+  border-bottom: 2px solid #01A982;
 }
 
 .system-header h4 {
@@ -114,7 +114,7 @@
 .score-value {
   font-size: 2.5em;
   font-weight: 700;
-  color: #4ECDC4;
+  color: #01A982;
   line-height: 1;
 }
 
@@ -149,7 +149,7 @@
 }
 
 .category-score {
-  background: #4ECDC4;
+  background: #01A982;
   color: white;
   padding: 4px 8px;
   border-radius: 4px;
@@ -263,7 +263,7 @@
 }
 
 .feature-item.present {
-  border-color: #4ECDC4;
+  border-color: #01A982;
   background: #f0fdfc;
 }
 

@@ -47,7 +47,7 @@ const SystemDetailPage = ({ system, onBack }) => {
 
   useEffect(() => {
     if (activeTab === 'performance') {
-      createTimeChart(capacityChartRef.current, capacityData, 'Capacity Usage (GiB)', '#4ECDC4', 'GiB');
+      createTimeChart(capacityChartRef.current, capacityData, 'Capacity Usage (GiB)', '#01A982', 'GiB');
       createTimeChart(latencyChartRef.current, latencyData, 'Latency (ms)', '#45B7AA', 'ms');
       createTimeChart(iopsChartRef.current, iopsData, 'IOPS (x10K)', '#3DA58A', 'K');
       createTimeChart(throughputChartRef.current, throughputData, 'Throughput (x100 MB/s)', '#36967D', 'MB/s');

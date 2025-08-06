@@ -4,6 +4,8 @@
   overflow: hidden;
   width: 100%;
   margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .device-row:hover {
@@ -15,7 +17,7 @@
   padding: 20px 25px;
   background: linear-gradient(135deg, #01A982 0%, #009B7A 100%);
   color: white;
-  border-bottom: none;
+  border-bottom: 1px solid #dee2e6;
   text-align: center;
 }
 
@@ -28,8 +30,8 @@
 
 .table-header p {
   margin: 0;
-  opacity: 0.9;
   font-size: 14px;
+  opacity: 0.9;
   color: white;
 }
 
@@ -54,31 +56,12 @@
   transform: translateY(-2px);
 }
 
-.device-insights-btn {
-  background: #01A982;
-  border: 2px solid #01A982;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
-  height: 36px;
-}
-
-.device-insights-btn:hover {
-  background: #009B7A;
-  border-color: #009B7A;
-  transform: scale(1.1);
-}
-
 .table-container {
   overflow-x: auto;
   width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 table {
@@ -86,14 +69,7 @@ table {
   border-collapse: collapse;
   font-size: 14px;
   min-width: 1400px;
-}
-
-thead {
-  background: #f8f9fa;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  border-bottom: 2px solid #4ECDC4;
+  flex: 1;
 }
 
 th {
@@ -105,33 +81,28 @@ th {
   font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  background: #F8F9FA;
+  border-bottom: 2px solid #E0E0E0;
 }
 
-/* Sortable column styles */
 th.sortable {
   cursor: pointer;
   user-select: none;
   transition: background-color 0.2s ease;
-  background: #f0f8f5;
-  position: relative;
 }
 
 th.sortable:hover {
-  background: #e8f5f1;
-  color: #01A982;
+  background: #e9ecef;
+  color: #495057;
 }
 
 th.sortable.active {
-  background: #01A982;
+  background: #495057;
   color: white;
   font-weight: 700;
 }
 
 /* Sort icon styling */
-th.sortable {
-  font-size: 12px;
-}
-
 th.sortable span.sort-icon {
   font-size: 10px;
   margin-left: 4px;
@@ -143,248 +114,203 @@ th.sortable.active span.sort-icon {
   opacity: 1;
 }
 
-th:first-child {
-  width: 250px;
-  min-width: 200px;
-  text-align: left;
-}
-
-/* Column width optimizations */
-th:nth-child(1) { /* Product Name */
-  width: 20%;
-  min-width: 250px;
-}
-
-th:nth-child(2) { /* Type */
-  width: 10%;
-  min-width: 120px;
-}
-
-th:nth-child(3), /* Device Score */
-th:nth-child(4), /* Performance Score */
-th:nth-child(5), /* Green Score */
-th:nth-child(6) { /* Feature Score */
-  width: 16%;
-  min-width: 180px;
-}
-
-th:nth-child(7) { /* Feedback */
-  width: 6%;
-  min-width: 150px;
-}
-
-.device-row {
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.device-row.selected {
-  background-color: #e8f8f5;
-  border-left: 4px solid #4ECDC4;
-}
-
 td {
   padding: 12px;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid #E8E8E8;
   vertical-align: middle;
-  text-align: left;
-}
-
-td:first-child {
-  text-align: left;
 }
 
 .device-name {
-  font-weight: 500;
-  color: #333;
-  max-width: 200px;
+  font-weight: 600;
+  color: #37474f;
+  min-width: 200px;
 }
 
 .device-name-link {
   background: none;
   border: none;
   color: #01A982;
+  cursor: pointer;
   font-weight: 600;
   font-size: 14px;
-  cursor: pointer;
-  text-align: left;
+  text-decoration: none;
   padding: 0;
-  text-decoration: underline;
+  text-align: left;
   transition: color 0.2s ease;
 }
 
 .device-name-link:hover {
-  color: #00854C;
-  text-decoration: none;
-}
-
-.device-name-link:active {
-  color: #006B3F;
-}
-
-.feedback-button {
-  background: linear-gradient(135deg, #01a982, #019870);
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(1, 169, 130, 0.2);
-}
-
-.feedback-button:hover {
-  background: linear-gradient(135deg, #019870, #017a5f);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(1, 169, 130, 0.3);
+  color: #009B7A;
+  text-decoration: underline;
 }
 
 .device-type {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 0.85em;
-  font-weight: 500;
-  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333333;
+  text-align: left;
 }
 
-.device-type.nvme-ssd {
-  background: #e8f8f5;
-  color: #00695c;
-}
-
-.device-type.sata-ssd {
-  background: #e3f2fd;
-  color: #1565c0;
-}
-
-.device-type.hdd {
-  background: #fff8e1;
-  color: #e65100;
-}
-
-.device-type.optane-ssd {
-  background: #fce4ec;
-  color: #ad1457;
-}
-
-.performance-metric {
-  font-family: 'Courier New', monospace;
-  font-weight: 500;
-  text-align: right;
+.capacity {
+  font-weight: 600;
+  color: #37474f;
 }
 
 .score-container {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 100px;
 }
 
 .score {
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-weight: 600;
-  font-size: 0.9em;
-  min-width: 30px;
-  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+  min-width: 25px;
 }
 
-.score.excellent {
-  background: #e8f8f5;
-  color: #00695c;
-}
-
+.score.excellent,
 .score.good {
-  background: #e3f2fd;
-  color: #1565c0;
-}
-
-.score.average {
-  background: #fff8e1;
-  color: #e65100;
-}
-
-.score.poor {
-  background: #ffebee;
-  color: #c62828;
-}
-
-/* Comparison-based colors */
-.score.above-average {
-  background: #E8F8F5;
-  color: #01A982;
+  color: white;
+  background: #01A982;
+  padding: 4px 8px;
+  border-radius: 12px;
   font-weight: 700;
 }
 
 .score.average {
-  background: #FFF3E0;
-  color: #FF9800;
-  font-weight: 600;
+  color: white;
+  background: #FFA726;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 700;
 }
 
-.score.below-average {
-  background: #FFEBEE;
-  color: #F44336;
-  font-weight: 600;
+.score.poor {
+  color: white;
+  background: #EF5350;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 700;
 }
 
 .score-bar {
   flex: 1;
-  height: 6px;
-  background: #e0e0e0;
-  border-radius: 3px;
+  height: 4px;
+  background-color: #E0E0E0;
+  border-radius: 2px;
   overflow: hidden;
-  min-width: 50px;
 }
 
 .score-fill {
   height: 100%;
-  border-radius: 3px;
+  border-radius: 2px;
   transition: width 0.3s ease;
 }
 
-.score-fill.excellent {
-  background: #4ECDC4;
+.score-fill.excellent,
+.storage-device-table .score-fill.excellent,
+.score-fill.good,
+.storage-device-table .score-fill.good {
+  background: #01A982 !important;
 }
 
-.score-fill.good {
-  background: #45B7AA;
+.score-fill.average,
+.storage-device-table .score-fill.average {
+  background: #FFA726 !important;
 }
 
-.score-fill.average {
-  background: #FFA726;
+.score-fill.poor,
+.storage-device-table .score-fill.poor {
+  background: #EF5350 !important;
 }
 
-.score-fill.poor {
-  background: #EF5350;
+.read-speed, .write-speed, .iops {
+  font-weight: 600;
+  color: #37474f;
 }
 
-/* Comparison-based score fill colors */
-.score-fill.above-average {
-  background: linear-gradient(90deg, #01A982, #00C49A);
+.latency {
+  font-weight: 600;
 }
 
-.score-fill.average {
-  background: linear-gradient(90deg, #FF9800, #FFB74D);
+.latency.low {
+  color: #01A982;
 }
 
-.score-fill.below-average {
-  background: linear-gradient(90deg, #F44336, #EF5350);
+.latency.medium {
+  color: #FF9800;
+}
+
+.latency.high {
+  color: #F44336;
+}
+
+.price {
+  font-weight: 700;
+  color: #37474f;
+  font-size: 16px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.compare-btn {
+  background: #ffffff;
+  border: 2px solid #01A982;
+  color: #01A982;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.compare-btn:hover {
+  background: #01A982;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.compare-btn.selected {
+  background: #01A982;
+  color: white;
+  font-weight: 700;
+}
+
+.feedback-button {
+  background: none;
+  border: none;
+  color: #01A982;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 0;
+  text-align: left;
+  transition: color 0.2s ease;
+}
+
+.feedback-button:hover {
+  color: #009B7A;
+  text-decoration: underline;
 }
 
 .table-summary {
-  padding: 20px;
-  background: #f8f9fa;
-  border-top: 1px solid #dee2e6;
+  background: #F8F9FA;
+  padding: 20px 25px;
+  border-top: 1px solid #E0E0E0;
 }
 
 .summary-stats {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: nowrap;
   gap: 15px;
-  justify-items: center;
+  overflow-x: auto;
 }
 
 .stat {
@@ -392,86 +318,89 @@ td:first-child {
   flex-direction: column;
   align-items: center;
   text-align: center;
+  min-width: 120px;
+  flex-shrink: 0;
 }
 
 .stat-label {
-  font-size: 0.75em;
+  font-size: 10px;
   color: #666;
   margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   white-space: nowrap;
 }
 
 .stat-value {
-  font-size: 1em;
-  font-weight: 600;
-  color: #333;
-}
-
-/* Checkbox styling */
-input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: #01A982;
 }
 
 /* Responsive design */
 @media (max-width: 1200px) {
-  .storage-device-table {
-    margin: 0;
-  }
-  
   table {
-    min-width: 1000px;
-  }
-  
-  th:nth-child(1) { /* Product Name */
-    width: 20%;
-    min-width: 180px;
+    min-width: 1200px;
   }
 }
 
 @media (max-width: 768px) {
-  .app-main {
-    padding: 0;
-  }
-  
-  .storage-device-table {
-    margin: 0;
-  }
-  
-  .table-header {
-    padding: 15px;
-  }
-  
-  table {
-    min-width: 800px;
-    font-size: 12px;
+  .summary-stats {
+    flex-direction: column;
+    gap: 15px;
   }
   
   th, td {
-    padding: 10px 8px;
-  }
-  
-  .feedback-button {
-    padding: 6px 10px;
-    font-size: 0.75rem;
+    padding: 8px 6px;
+    font-size: 12px;
   }
   
   .device-name {
-    max-width: 150px;
-    font-size: 0.9em;
+    min-width: 150px;
   }
   
-  .summary-stats {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+  .action-buttons {
+    flex-direction: column;
+    gap: 4px;
   }
   
-  .stat-label {
-    font-size: 0.7em;
+  .compare-btn,
+  .feedback-button {
+    font-size: 12px;
+    padding: 0;
   }
   
   .stat-value {
-    font-size: 0.9em;
+    font-size: 0.8em;
   }
+}
+
+/* Pagination integration with table */
+.storage-device-table .pagination-container {
+  border-top: 1px solid #e0e0e0;
+  background: #f8f9fa;
+  margin: 0;
+  border-radius: 0;
+}
+
+.storage-device-table .pagination-container .pagination-info {
+  color: #666;
+  font-weight: 500;
+}
+
+.storage-device-table .pagination-container .pagination-btn {
+  background: #ffffff;
+  border: 1px solid #d0d7de;
+  color: #24292f;
+}
+
+.storage-device-table .pagination-container .pagination-btn:hover:not(.disabled) {
+  background: #f3f4f6;
+  border-color: #01A982;
+}
+
+.storage-device-table .pagination-container .pagination-page.active {
+  background: #01A982;
+  border-color: #01A982;
+  color: #ffffff;
 }

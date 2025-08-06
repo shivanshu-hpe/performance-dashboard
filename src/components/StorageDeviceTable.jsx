@@ -1,10 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './StorageDeviceTable.css';
 import FeedbackModal from './FeedbackModal';
+import Pagination from './Pagination';
+import usePagination from '../hooks/usePagination';
+import { StatusGood } from 'grommet-icons';
 
 const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averageData }) => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Pagination hook
+  const {
+    currentPage,
+    totalItems,
+    paginatedData,
+    handlePageChange,
+    resetPagination
+  } = usePagination(devices, 10);
+
+  // Reset pagination when devices array length changes (indicating new data)
+  useEffect(() => {
+    resetPagination();
+  }, [devices?.length, resetPagination]);
 
   const handleFeedbackClick = (device) => {
     setSelectedDevice(device);
@@ -57,7 +74,7 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
     <div className="storage-device-table">
       <div className="table-header">
         <div>
-          <h3>📊 HPE Storage Product Overview</h3>
+          <h3>HPE Storage Product Overview</h3>
           <p>Comprehensive comparison of all HPE storage solutions with key scores</p>
         </div>
       </div>
@@ -67,7 +84,7 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
           <thead>
             <tr>
               <th>Product Name</th>
-              <th>Type</th>
+              <th>Storage Tier</th>
               <th 
                 className={`sortable ${sortConfig?.key === 'deviceScore' ? 'active' : ''}`}
                 onClick={() => onSort('deviceScore')}
@@ -96,7 +113,7 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
             </tr>
           </thead>
           <tbody>
-            {devices.map((device) => {
+            {paginatedData.map((device) => {
               return (
               <tr 
                 key={device.id} 
@@ -112,18 +129,18 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
                   </button>
                 </td>
                 <td>
-                  <span className={`device-type ${device.type.toLowerCase().replace(' ', '-')}`}>
+                  <span className={`device-type ${device.type.toLowerCase().replace(/\s+/g, '-')}`}>
                     {device.type}
                   </span>
                 </td>
                 <td>
                   <div className="score-container">
-                    <span className={`score ${getComparisonLevel(device.deviceScore, averageData?.deviceScore || 85)}`}>
+                    <span className={`score ${getPerformanceLevel(device.deviceScore)}`}>
                       {device.deviceScore}
                     </span>
                     <div className="score-bar">
                       <div 
-                        className={`score-fill ${getComparisonLevel(device.deviceScore, averageData?.deviceScore || 85)}`}
+                        className={`score-fill ${getPerformanceLevel(device.deviceScore)}`}
                         style={{ width: `${device.deviceScore}%` }}
                       ></div>
                     </div>
@@ -131,12 +148,12 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
                 </td>
                 <td>
                   <div className="score-container">
-                    <span className={`score ${getComparisonLevel(device.score, averageData?.score || 82)}`}>
+                    <span className={`score ${getPerformanceLevel(device.score)}`}>
                       {device.score}
                     </span>
                     <div className="score-bar">
                       <div 
-                        className={`score-fill ${getComparisonLevel(device.score, averageData?.score || 82)}`}
+                        className={`score-fill ${getPerformanceLevel(device.score)}`}
                         style={{ width: `${device.score}%` }}
                       ></div>
                     </div>
@@ -144,12 +161,12 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
                 </td>
                 <td>
                   <div className="score-container">
-                    <span className={`score ${getComparisonLevel(device.greenScore, averageData?.greenScore || 78)}`}>
+                    <span className={`score ${getPerformanceLevel(device.greenScore)}`}>
                       {device.greenScore}
                     </span>
                     <div className="score-bar">
                       <div 
-                        className={`score-fill ${getComparisonLevel(device.greenScore, averageData?.greenScore || 78)}`}
+                        className={`score-fill ${getPerformanceLevel(device.greenScore)}`}
                         style={{ width: `${device.greenScore}%` }}
                       ></div>
                     </div>
@@ -157,12 +174,12 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
                 </td>
                 <td>
                   <div className="score-container">
-                    <span className={`score ${getComparisonLevel(device.featureScore, averageData?.featureScore || 80)}`}>
+                    <span className={`score ${getPerformanceLevel(device.featureScore)}`}>
                       {device.featureScore}
                     </span>
                     <div className="score-bar">
                       <div 
-                        className={`score-fill ${getComparisonLevel(device.featureScore, averageData?.featureScore || 80)}`}
+                        className={`score-fill ${getPerformanceLevel(device.featureScore)}`}
                         style={{ width: `${device.featureScore}%` }}
                       ></div>
                     </div>
@@ -174,7 +191,7 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
                     onClick={() => handleFeedbackClick(device)}
                     title="View improvement suggestions"
                   >
-                    💡 Get Suggestions
+                    Get Suggestions
                   </button>
                 </td>
               </tr>
@@ -182,6 +199,13 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
             })}
           </tbody>
         </table>
+        
+        <Pagination
+          currentPage={currentPage}
+          totalItems={totalItems}
+          itemsPerPage={10}
+          onPageChange={handlePageChange}
+        />
       </div>
       
       <div className="table-summary">

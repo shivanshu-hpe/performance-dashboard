@@ -1,10 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ComparisonTable.css';
 import FeatureFeedbackModal from './FeatureFeedbackModal';
+import Pagination from './Pagination';
+import usePagination from '../hooks/usePagination';
 
 const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData }) => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Pagination hook
+  const {
+    currentPage,
+    totalItems,
+    paginatedData,
+    handlePageChange,
+    resetPagination
+  } = usePagination(devices, 10);
+
+  // Reset pagination when devices change
+  useEffect(() => {
+    resetPagination();
+  }, [devices, resetPagination]);
 
   const handleFeedbackClick = (device) => {
     setSelectedDevice(device);
@@ -49,7 +65,7 @@ const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData 
     <div className="comparison-table feature-table">
       <div className="table-header">
         <div>
-          <h3>🔧 Feature Metrics Comparison</h3>
+          <h3>Feature Metrics Comparison</h3>
           <p>Advanced capabilities and supported features</p>
         </div>
       </div>
@@ -78,7 +94,7 @@ const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData 
             </tr>
           </thead>
           <tbody>
-            {devices.map((device) => (
+            {paginatedData.map((device) => (
               <tr key={device.id} className="device-row">
                 <td className="device-name">
                   <button 
@@ -118,11 +134,14 @@ const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData 
                 </td>
                 <td className="protocols">
                   <div className="protocol-list">
-                    {device.protocols.map((protocol, index) => (
-                      <span key={index} className="protocol-tag">
-                        {protocol}
-                      </span>
-                    ))}
+                    {device.protocols && Array.isArray(device.protocols) ? 
+                      device.protocols.map((protocol, index) => (
+                        <span key={index} className="protocol-tag">
+                          {protocol}
+                        </span>
+                      )) : 
+                      <span className="protocol-tag">N/A</span>
+                    }
                   </div>
                 </td>
                 <td>
@@ -131,13 +150,20 @@ const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData 
                     onClick={() => handleFeedbackClick(device)}
                     title="View feature enhancement suggestions"
                   >
-                    🔧 Enhance Features
+                    Enhance Features
                   </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        
+        <Pagination
+          currentPage={currentPage}
+          totalItems={totalItems}
+          itemsPerPage={10}
+          onPageChange={handlePageChange}
+        />
       </div>
       
       <div className="table-summary">
@@ -151,19 +177,29 @@ const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData 
           <div className="stat">
             <span className="stat-label">Best Data Reduction:</span>
             <span className="stat-value">
-              {devices.reduce((best, device) => {
-                const currentRatio = parseInt(device.dataReduction.split(':')[0]);
-                const bestRatio = parseInt(best.dataReduction.split(':')[0]);
-                return currentRatio > bestRatio ? device : best;
-              }).dataReduction}
+              {devices.filter(device => device.dataReduction && device.dataReduction.includes(':')).length > 0 
+                ? devices
+                    .filter(device => device.dataReduction && device.dataReduction.includes(':'))
+                    .reduce((best, device) => {
+                      const currentRatio = parseInt(device.dataReduction.split(':')[0]);
+                      const bestRatio = parseInt(best.dataReduction.split(':')[0]);
+                      return currentRatio > bestRatio ? device : best;
+                    }).dataReduction
+                : 'N/A'
+              }
             </span>
           </div>
           <div className="stat">
             <span className="stat-label">Most Protocols:</span>
             <span className="stat-value">
-              {devices.reduce((best, device) => 
-                device.protocols.length > best.protocols.length ? device : best
-              ).protocols.length}
+              {devices.filter(device => device.protocols && Array.isArray(device.protocols)).length > 0
+                ? devices
+                    .filter(device => device.protocols && Array.isArray(device.protocols))
+                    .reduce((best, device) => 
+                      device.protocols.length > best.protocols.length ? device : best
+                    ).protocols.length
+                : 0
+              }
             </span>
           </div>
         </div>

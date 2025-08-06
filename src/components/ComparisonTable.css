@@ -2,30 +2,36 @@
 .comparison-table {
   background: white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
   margin-bottom: 30px;
   overflow: hidden;
   width: 100%;
   margin-left: 0;
   margin-right: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .comparison-table .table-header {
-  background: linear-gradient(135deg, #01A982 0%, #009B7A 100%);
+  background: linear-gradient(135deg, #01A982 0%, #018f6f 100%);
   color: white;
   padding: 20px 25px;
   text-align: center;
+  border-bottom: 1px solid #dee2e6;
 }
 
 .comparison-table .table-header h3 {
   margin: 0 0 8px 0;
   font-size: 20px;
   font-weight: 700;
+  color: white;
 }
 
 .comparison-table .table-header p {
   margin: 0;
   font-size: 14px;
   opacity: 0.9;
+  color: white;
 }
 
 .comparison-table .insights-btn {
@@ -55,7 +61,7 @@
 }
 
 .sustainability-table .score-fill.sustainability {
-  background: linear-gradient(90deg, #01A982, #00C49A);
+  background: #01A982;
 }
 
 .carbon-reduction {
@@ -77,7 +83,7 @@
 }
 
 .performance-table .score-fill.performance {
-  background: linear-gradient(90deg, #01A982, #00C49A);
+  background: #01A982;
 }
 
 .performance-metric {
@@ -91,7 +97,7 @@
 }
 
 .latency-metric .low-latency {
-  color: #4CAF50;
+  color: #01A982;
   font-weight: 700;
 }
 
@@ -111,7 +117,7 @@
 }
 
 .feature-table .score-fill.feature {
-  background: linear-gradient(90deg, #01A982, #00C49A);
+  background: #01A982;
 }
 
 .data-reduction-badge {
@@ -138,7 +144,7 @@
 
 .feature-badge.optional {
   background: #FFF3E0;
-  color: #009B7A;
+  color: #26A69A;
 }
 
 .feature-badge.unavailable {
@@ -179,13 +185,16 @@
 
 .deployment-badge.on_premises {
   background: #E8F8F5;
-  color: #009B7A;
+  color: #26A69A;
 }
 
 /* Common table styles for comparison tables */
 .comparison-table .table-container {
   overflow-x: auto;
   width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .comparison-table table {
@@ -193,6 +202,7 @@
   border-collapse: collapse;
   font-size: 14px;
   min-width: 1400px;
+  flex: 1;
 }
 
 .comparison-table th {
@@ -215,12 +225,12 @@
 }
 
 .comparison-table th.sortable:hover {
-  background: #E8F5F1;
-  color: #01A982;
+  background: #e9ecef;
+  color: #495057;
 }
 
 .comparison-table th.sortable.active {
-  background: #01A982;
+  background: #495057;
   color: white;
   font-weight: 700;
 }
@@ -272,22 +282,21 @@
 }
 
 .comparison-table .feedback-button {
-  background: linear-gradient(135deg, #01a982, #019870);
-  color: white;
+  background: none;
   border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: 500;
+  color: #01A982;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(1, 169, 130, 0.2);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 0;
+  text-align: left;
+  transition: color 0.2s ease;
 }
 
 .comparison-table .feedback-button:hover {
-  background: linear-gradient(135deg, #019870, #017a5f);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(1, 169, 130, 0.3);
+  color: #009B7A;
+  text-decoration: underline;
 }
 
 .comparison-table .score-container {
@@ -305,67 +314,83 @@
 
 .comparison-table .score-bar {
   flex: 1;
-  height: 8px;
+  height: 4px;
   background-color: #E0E0E0;
-  border-radius: 4px;
+  border-radius: 2px;
   overflow: hidden;
 }
 
 .comparison-table .score-fill {
   height: 100%;
-  border-radius: 4px;
+  border-radius: 2px;
   transition: width 0.3s ease;
 }
 
 .comparison-table .score.excellent,
-.comparison-table .score-fill.excellent {
-  color: #4ECDC4;
+.comparison-table .score.good {
+  color: white;
+  background: #01A982;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 700;
 }
 
-.comparison-table .score.good,
+.comparison-table .score-fill.excellent,
 .comparison-table .score-fill.good {
-  color: #45B7AA;
+  background: #01A982;
 }
 
-.comparison-table .score.average,
+.comparison-table .score.average {
+  color: white;
+  background: #FFA726;
+  padding: 4px 8px;
+  border-radius: 12px;  
+  font-weight: 700;
+}
+
 .comparison-table .score-fill.average {
-  color: #FFA726;
+  background: #FFA726;
 }
 
-.comparison-table .score.poor,
+.comparison-table .score.poor {
+  color: white;
+  background: #EF5350;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
 .comparison-table .score-fill.poor {
-  color: #EF5350;
+  background: #EF5350;
 }
 
 /* Comparison-based colors for all comparison tables */
 .comparison-table .score.above-average {
-  background: #E8F8F5;
-  color: #01A982;
+  background: #01A982;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
   font-weight: 700;
 }
 
-.comparison-table .score.average {
-  background: #FFF3E0;
-  color: #FF9800;
-  font-weight: 600;
-}
-
 .comparison-table .score.below-average {
-  background: #FFEBEE;
-  color: #F44336;
-  font-weight: 600;
+  background: #F44336;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 700;
 }
 
 .comparison-table .score-fill.above-average {
-  background: linear-gradient(90deg, #01A982, #00C49A);
+  background: #01A982;
 }
 
 .comparison-table .score-fill.average {
-  background: linear-gradient(90deg, #FF9800, #FFB74D);
+  background: #FF9800;
 }
 
 .comparison-table .score-fill.below-average {
-  background: linear-gradient(90deg, #F44336, #EF5350);
+  background: #F44336;
 }
 
 .comparison-table .table-summary {
@@ -426,4 +451,34 @@
   .comparison-table .protocol-list {
     flex-direction: column;
   }
+}
+
+/* Pagination integration with comparison tables */
+.comparison-table .pagination-container {
+  border-top: 1px solid #e0e0e0;
+  background: #f8f9fa;
+  margin: 0;
+  border-radius: 0;
+}
+
+.comparison-table .pagination-container .pagination-info {
+  color: #666;
+  font-weight: 500;
+}
+
+.comparison-table .pagination-container .pagination-btn {
+  background: #ffffff;
+  border: 1px solid #d0d7de;
+  color: #24292f;
+}
+
+.comparison-table .pagination-container .pagination-btn:hover:not(.disabled) {
+  background: #f3f4f6;
+  border-color: #01A982;
+}
+
+.comparison-table .pagination-container .pagination-page.active {
+  background: #01A982;
+  border-color: #01A982;
+  color: #ffffff;
 }

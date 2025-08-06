@@ -1,10 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ComparisonTable.css';
 import PerformanceFeedbackModal from './PerformanceFeedbackModal';
+import Pagination from './Pagination';
+import usePagination from '../hooks/usePagination';
 
 const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageData }) => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Pagination hook
+  const {
+    currentPage,
+    totalItems,
+    paginatedData,
+    handlePageChange,
+    resetPagination
+  } = usePagination(devices, 10);
+
+  // Reset pagination when devices change
+  useEffect(() => {
+    resetPagination();
+  }, [devices, resetPagination]);
 
   const handleFeedbackClick = (device) => {
     setSelectedDevice(device);
@@ -55,7 +71,7 @@ const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageD
     <div className="comparison-table performance-table">
       <div className="table-header">
         <div>
-          <h3>⚡ Performance Metrics Comparison</h3>
+          <h3>Performance Metrics Comparison</h3>
           <p>Speed, capacity, and operational performance indicators</p>
         </div>
       </div>
@@ -105,7 +121,7 @@ const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageD
             </tr>
           </thead>
           <tbody>
-            {devices.map((device) => (
+            {paginatedData.map((device) => (
               <tr key={device.id} className="device-row">
                 <td className="device-name">
                   <button 
@@ -143,13 +159,20 @@ const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageD
                     onClick={() => handleFeedbackClick(device)}
                     title="View performance optimization suggestions"
                   >
-                    ⚡ Optimize Performance
+                    Optimize Performance
                   </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        
+        <Pagination
+          currentPage={currentPage}
+          totalItems={totalItems}
+          itemsPerPage={10}
+          onPageChange={handlePageChange}
+        />
       </div>
       
       <div className="table-summary">
