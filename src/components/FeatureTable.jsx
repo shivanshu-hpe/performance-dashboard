@@ -5,7 +5,7 @@ import Pagination from './Pagination';
 import usePagination from '../hooks/usePagination';
 import { getPerformanceLevel } from '../utils/scoreUtils';
 
-const FeatureTable = ({ devices, onViewDetails, averageData }) => {
+const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData }) => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -33,6 +33,15 @@ const FeatureTable = ({ devices, onViewDetails, averageData }) => {
     setSelectedDevice(null);
   };
 
+  const getSortIcon = (columnKey) => {
+    if (sortConfig?.key !== columnKey) return '▲▼';
+    return sortConfig.direction === 'asc' ? '▲' : '▼';
+  };
+
+  const handleSort = (sortKey) => {
+    onSort(sortKey, 'feature');
+  };
+
   const formatProtocols = (protocols) => {
     return protocols.join(', ');
   };
@@ -50,9 +59,24 @@ const FeatureTable = ({ devices, onViewDetails, averageData }) => {
         <table>
           <thead>
             <tr>
-              <th>Product Name</th>
-              <th>Feature Score</th>
-              <th>Data Reduction</th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'name' ? 'active' : ''}`}
+                onClick={() => handleSort('name')}
+              >
+                Product Name {getSortIcon('name')}
+              </th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'featureScore' ? 'active' : ''}`}
+                onClick={() => handleSort('featureScore')}
+              >
+                Feature Score {getSortIcon('featureScore')}
+              </th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'dataReduction' ? 'active' : ''}`}
+                onClick={() => handleSort('dataReduction')}
+              >
+                Data Reduction {getSortIcon('dataReduction')}
+              </th>
               <th>Snapshots</th>
               <th>Replication</th>
               <th>Protocols</th>

@@ -6,7 +6,7 @@ import usePagination from '../hooks/usePagination';
 import { StatusGood } from 'grommet-icons';
 import { getPerformanceLevel, formatNumber } from '../utils/scoreUtils';
 
-const StorageDeviceTable = ({ devices, onViewDetails, averageData }) => {
+const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averageData }) => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   
@@ -34,6 +34,15 @@ const StorageDeviceTable = ({ devices, onViewDetails, averageData }) => {
     setSelectedDevice(null);
   };
 
+  const getSortIcon = (columnKey) => {
+    if (sortConfig?.key !== columnKey) return '▲▼';
+    return sortConfig.direction === 'asc' ? '▲' : '▼';
+  };
+
+  const handleSort = (sortKey) => {
+    onSort(sortKey, 'main');
+  };
+
   return (
     <div className="storage-device-table">
       <div className="table-header">
@@ -47,12 +56,37 @@ const StorageDeviceTable = ({ devices, onViewDetails, averageData }) => {
         <table>
           <thead>
             <tr>
-              <th>Product Name</th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'name' ? 'active' : ''}`}
+                onClick={() => handleSort('name')}
+              >
+                Product Name {getSortIcon('name')}
+              </th>
               <th>Storage Tier</th>
-              <th>Device Score</th>
-              <th>Performance Score</th>
-              <th>Green Score</th>
-              <th>Feature Score</th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'deviceScore' ? 'active' : ''}`}
+                onClick={() => handleSort('deviceScore')}
+              >
+                Device Score {getSortIcon('deviceScore')}
+              </th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'score' ? 'active' : ''}`}
+                onClick={() => handleSort('score')}
+              >
+                Performance Score {getSortIcon('score')}
+              </th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'greenScore' ? 'active' : ''}`}
+                onClick={() => handleSort('greenScore')}
+              >
+                Green Score {getSortIcon('greenScore')}
+              </th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'featureScore' ? 'active' : ''}`}
+                onClick={() => handleSort('featureScore')}
+              >
+                Feature Score {getSortIcon('featureScore')}
+              </th>
               <th>Feedback</th>
             </tr>
           </thead>

@@ -5,7 +5,7 @@ import Pagination from './Pagination';
 import usePagination from '../hooks/usePagination';
 import { getPerformanceLevel, formatNumber } from '../utils/scoreUtils';
 
-const PerformanceTable = ({ devices, onViewDetails, averageData }) => {
+const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageData }) => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -33,6 +33,15 @@ const PerformanceTable = ({ devices, onViewDetails, averageData }) => {
     setSelectedDevice(null);
   };
 
+  const getSortIcon = (columnKey) => {
+    if (sortConfig?.key !== columnKey) return '▲▼';
+    return sortConfig.direction === 'asc' ? '▲' : '▼';
+  };
+
+  const handleSort = (sortKey) => {
+    onSort(sortKey, 'performance');
+  };
+
   return (
     <div className="comparison-table performance-table">
       <div className="table-header">
@@ -46,13 +55,48 @@ const PerformanceTable = ({ devices, onViewDetails, averageData }) => {
         <table>
           <thead>
             <tr>
-              <th>Product Name</th>
-              <th>Performance Score</th>
-              <th>Capacity</th>
-              <th>Read Speed (MB/s)</th>
-              <th>Write Speed (MB/s)</th>
-              <th>IOPS</th>
-              <th>Latency (ms)</th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'name' ? 'active' : ''}`}
+                onClick={() => handleSort('name')}
+              >
+                Product Name {getSortIcon('name')}
+              </th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'score' ? 'active' : ''}`}
+                onClick={() => handleSort('score')}
+              >
+                Performance Score {getSortIcon('score')}
+              </th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'capacity' ? 'active' : ''}`}
+                onClick={() => handleSort('capacity')}
+              >
+                Capacity {getSortIcon('capacity')}
+              </th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'readSpeed' ? 'active' : ''}`}
+                onClick={() => handleSort('readSpeed')}
+              >
+                Read Speed (MB/s) {getSortIcon('readSpeed')}
+              </th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'writeSpeed' ? 'active' : ''}`}
+                onClick={() => handleSort('writeSpeed')}
+              >
+                Write Speed (MB/s) {getSortIcon('writeSpeed')}
+              </th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'iops' ? 'active' : ''}`}
+                onClick={() => handleSort('iops')}
+              >
+                IOPS {getSortIcon('iops')}
+              </th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'latency' ? 'active' : ''}`}
+                onClick={() => handleSort('latency')}
+              >
+                Latency (ms) {getSortIcon('latency')}
+              </th>
               <th>Feedback</th>
             </tr>
           </thead>

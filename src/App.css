@@ -235,6 +235,7 @@ body {
   justify-content: center;
   width: 32px;
   height: 32px;
+  position: relative;
 }
 
 .refresh-button:hover {
@@ -249,6 +250,65 @@ body {
 
 .refresh-button:hover svg {
   transform: rotate(180deg);
+}
+
+/* Enhanced tooltip styling */
+.refresh-button[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -35px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* Auto-polling indicator */
+.polling-indicator {
+  color: #01A982;
+  font-size: 8px;
+  margin-left: 4px;
+  animation: pulse 2s infinite;
+  cursor: help;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* Table refresh overlay */
+.table-refresh-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: 8px;
+}
+
+.table-refresh-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #e0e0e0;
+  border-top: 3px solid #01A982;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* Loading State */

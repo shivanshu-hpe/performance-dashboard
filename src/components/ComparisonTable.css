@@ -13,11 +13,12 @@
 }
 
 .comparison-table .table-header {
-  background: linear-gradient(135deg, #01A982 0%, #018f6f 100%);
+  background: linear-gradient(135deg, #01A982 0%, #00854C 100%);
   color: white;
   padding: 20px 25px;
   text-align: center;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 2px solid #00854C;
+  box-shadow: 0 2px 8px rgba(1, 169, 130, 0.3);
 }
 
 .comparison-table .table-header h3 {
@@ -57,7 +58,12 @@
 
 /* Sustainability Table Specific Styles */
 .sustainability-table .table-header {
-  background: linear-gradient(135deg, #01A982 0%, #009B7A 100%);
+  background: linear-gradient(135deg, #01A982 0%, #00854C 100%);
+  color: white;
+  padding: 20px 25px;
+  text-align: center;
+  border-bottom: 2px solid #00854C;
+  box-shadow: 0 2px 8px rgba(1, 169, 130, 0.3);
 }
 
 .sustainability-table .score-fill.sustainability {
@@ -79,7 +85,12 @@
 
 /* Performance Table Specific Styles */
 .performance-table .table-header {
-  background: linear-gradient(135deg, #01A982 0%, #009B7A 100%);
+  background: linear-gradient(135deg, #01A982 0%, #00854C 100%);
+  color: white;
+  padding: 20px 25px;
+  text-align: center;
+  border-bottom: 2px solid #00854C;
+  box-shadow: 0 2px 8px rgba(1, 169, 130, 0.3);
 }
 
 .performance-table .score-fill.performance {
@@ -113,7 +124,12 @@
 
 /* Feature Table Specific Styles */
 .feature-table .table-header {
-  background: linear-gradient(135deg, #01A982 0%, #009B7A 100%);
+  background: linear-gradient(135deg, #01A982 0%, #00854C 100%);
+  color: white;
+  padding: 20px 25px;
+  text-align: center;
+  border-bottom: 2px solid #00854C;
+  box-shadow: 0 2px 8px rgba(1, 169, 130, 0.3);
 }
 
 .feature-table .score-fill.feature {
@@ -221,30 +237,62 @@
 .comparison-table th.sortable {
   cursor: pointer;
   user-select: none;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
+  position: relative;
+  border-radius: 4px 4px 0 0;
 }
 
 .comparison-table th.sortable:hover {
-  background: #e9ecef;
-  color: #495057;
+  background: linear-gradient(135deg, #e8f5f2 0%, #f0f9f7 100%);
+  color: #00854C;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(1, 169, 130, 0.1);
+}
+
+.comparison-table th.sortable:active {
+  transform: translateY(0);
+  transition: transform 0.1s ease;
 }
 
 .comparison-table th.sortable.active {
-  background: #495057;
+  background: linear-gradient(135deg, #01A982 0%, #00854C 100%);
   color: white;
   font-weight: 700;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(1, 169, 130, 0.3);
+  border-bottom: 2px solid #00854C;
+}
+
+.comparison-table th.sortable.active::before {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #00854C;
 }
 
 /* Sort icon styling for comparison tables */
 .comparison-table th.sortable span.sort-icon {
-  font-size: 10px;
-  margin-left: 4px;
+  font-size: 11px;
+  margin-left: 6px;
   opacity: 0.6;
+  transition: all 0.2s ease;
+  display: inline-block;
 }
 
-.comparison-table th.sortable:hover span.sort-icon,
+.comparison-table th.sortable:hover span.sort-icon {
+  opacity: 0.8;
+  color: #00854C;
+  transform: scale(1.1);
+}
+
 .comparison-table th.sortable.active span.sort-icon {
   opacity: 1;
+  color: white;
+  font-weight: bold;
+  transform: scale(1.2);
 }
 
 .comparison-table td {

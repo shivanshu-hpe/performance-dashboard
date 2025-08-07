@@ -15,10 +15,11 @@
 
 .table-header {
   padding: 20px 25px;
-  background: linear-gradient(135deg, #01A982 0%, #009B7A 100%);
+  background: linear-gradient(135deg, #01A982 0%, #00854C 100%);
   color: white;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 2px solid #00854C;
   text-align: center;
+  box-shadow: 0 2px 8px rgba(1, 169, 130, 0.3);
 }
 
 .table-header h3 {
@@ -88,30 +89,62 @@ th {
 th.sortable {
   cursor: pointer;
   user-select: none;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
+  position: relative;
+  border-radius: 4px 4px 0 0;
 }
 
 th.sortable:hover {
-  background: #e9ecef;
-  color: #495057;
+  background: linear-gradient(135deg, #e8f5f2 0%, #f0f9f7 100%);
+  color: #00854C;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(1, 169, 130, 0.1);
+}
+
+th.sortable:active {
+  transform: translateY(0);
+  transition: transform 0.1s ease;
 }
 
 th.sortable.active {
-  background: #495057;
+  background: linear-gradient(135deg, #01A982 0%, #00854C 100%);
   color: white;
   font-weight: 700;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(1, 169, 130, 0.3);
+  border-bottom: 2px solid #00854C;
+}
+
+th.sortable.active::before {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #00854C;
 }
 
 /* Sort icon styling */
 th.sortable span.sort-icon {
-  font-size: 10px;
-  margin-left: 4px;
+  font-size: 11px;
+  margin-left: 6px;
   opacity: 0.6;
+  transition: all 0.2s ease;
+  display: inline-block;
 }
 
-th.sortable:hover span.sort-icon,
+th.sortable:hover span.sort-icon {
+  opacity: 0.8;
+  color: #00854C;
+  transform: scale(1.1);
+}
+
 th.sortable.active span.sort-icon {
   opacity: 1;
+  color: white;
+  font-weight: bold;
+  transform: scale(1.2);
 }
 
 td {

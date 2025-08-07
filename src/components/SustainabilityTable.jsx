@@ -5,7 +5,7 @@ import Pagination from './Pagination';
 import usePagination from '../hooks/usePagination';
 import { getPerformanceLevel } from '../utils/scoreUtils';
 
-const SustainabilityTable = ({ devices, onViewDetails, averageData }) => {
+const SustainabilityTable = ({ devices, onSort, sortConfig, onViewDetails, averageData }) => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -33,6 +33,15 @@ const SustainabilityTable = ({ devices, onViewDetails, averageData }) => {
     setSelectedDevice(null);
   };
 
+  const getSortIcon = (columnKey) => {
+    if (sortConfig?.key !== columnKey) return '▲▼';
+    return sortConfig.direction === 'asc' ? '▲' : '▼';
+  };
+
+  const handleSort = (sortKey) => {
+    onSort(sortKey, 'sustainability');
+  };
+
   return (
     <div className="comparison-table sustainability-table">
       <div className="table-header">
@@ -46,10 +55,30 @@ const SustainabilityTable = ({ devices, onViewDetails, averageData }) => {
         <table>
           <thead>
             <tr>
-              <th>Product Name</th>
-              <th>Green Score</th>
-              <th>Power Efficiency</th>
-              <th>Carbon Reduction %</th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'name' ? 'active' : ''}`}
+                onClick={() => handleSort('name')}
+              >
+                Product Name {getSortIcon('name')}
+              </th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'greenScore' ? 'active' : ''}`}
+                onClick={() => handleSort('greenScore')}
+              >
+                Green Score {getSortIcon('greenScore')}
+              </th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'sustainability.powerEfficiency' ? 'active' : ''}`}
+                onClick={() => handleSort('sustainability.powerEfficiency')}
+              >
+                Power Efficiency {getSortIcon('sustainability.powerEfficiency')}
+              </th>
+              <th 
+                className={`sortable ${sortConfig?.key === 'sustainability.carbonReduction' ? 'active' : ''}`}
+                onClick={() => handleSort('sustainability.carbonReduction')}
+              >
+                Carbon Reduction % {getSortIcon('sustainability.carbonReduction')}
+              </th>
               <th>Feedback</th>
             </tr>
           </thead>

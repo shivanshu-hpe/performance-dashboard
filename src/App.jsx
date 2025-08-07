@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import './App.css';
+
+// Components
 import StorageDeviceTable from './components/StorageDeviceTable';
 import SustainabilityTable from './components/SustainabilityTable';
 import PerformanceTable from './components/PerformanceTable';
@@ -75,21 +77,48 @@ function Dashboard() {
   // Loading and error states
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Auto-polling state
+  const [lastUpdated, setLastUpdated] = useState(null);
+  const [isPolling, setIsPolling] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Load all data from API or mock
-  const loadAllData = async () => {
-    setLoading(true);
+  // Sorting state - separate for each table
+  const [sortConfigs, setSortConfigs] = useState({
+    main: { key: 'deviceScore', direction: 'desc' },
+    sustainability: { key: 'greenScore', direction: 'desc' },
+    performance: { key: 'score', direction: 'desc' },
+    feature: { key: 'featureScore', direction: 'asc' }
+  });
+
+  // Load all data from API or mock with sorting
+  const loadAllData = async (sortKey = null, sortDirection = null, tableType = null, isAutoRefresh = false) => {
+    if (!isAutoRefresh) {
+      setLoading(true);
+    } else {
+      setIsRefreshing(true); // Show spinner for auto-refresh
+    }
     setError(null);
 
     try {
       console.log('🔄 Loading storage data...');
       
-      // Load all data in parallel for better performance
+      // Use current sort configs if no specific sort params provided
+      const mainSort = sortKey && tableType === 'main' ? 
+        { key: sortKey, direction: sortDirection } : sortConfigs.main;
+      const sustainabilitySort = sortKey && tableType === 'sustainability' ? 
+        { key: sortKey, direction: sortDirection } : sortConfigs.sustainability;
+      const performanceSort = sortKey && tableType === 'performance' ? 
+        { key: sortKey, direction: sortDirection } : sortConfigs.performance;
+      const featureSort = sortKey && tableType === 'feature' ? 
+        { key: sortKey, direction: sortDirection } : sortConfigs.feature;
+      
+      // Load all data in parallel for better performance with sorting
       const [devices, sustainability, performance, features] = await Promise.all([
-        StorageApiService.getStorageDevices(),
-        StorageApiService.getSustainabilityMetrics(),
-        StorageApiService.getPerformanceMetrics(),
-        StorageApiService.getFeatureComparison()
+        StorageApiService.getStorageDevices(mainSort.key, mainSort.direction),
+        StorageApiService.getSustainabilityMetrics(sustainabilitySort.key, sustainabilitySort.direction),
+        StorageApiService.getPerformanceMetrics(performanceSort.key, performanceSort.direction),
+        StorageApiService.getFeatureComparison(featureSort.key, featureSort.direction)
       ]);
 
       console.log('✅ Data loaded successfully:', {
@@ -103,12 +132,14 @@ function Dashboard() {
       setSustainabilityData(sustainability);
       setPerformanceData(performance);
       setFeatureData(features);
+      setLastUpdated(new Date());
 
     } catch (err) {
       console.error('❌ Failed to load data:', err);
       setError(err.message);
     } finally {
       setLoading(false);
+      setIsRefreshing(false); // Clear refresh spinner
     }
   };
 
@@ -117,10 +148,74 @@ function Dashboard() {
     loadAllData();
   }, []);
 
-  // Handle system selection (navigate to detail page)
-  const handleSystemSelect = (system) => {
-    console.log('📱 Navigating to system:', system.name);
-    navigate(`/system/${system.id}`);
+  // Auto-polling every 30 seconds
+  useEffect(() => {
+    if (!isPolling) return;
+
+    const interval = setInterval(() => {
+      console.log('🔄 Auto-polling data refresh...');
+      loadAllData(null, null, null, true); // isAutoRefresh = true to avoid loading state
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(interval);
+  }, [isPolling, sortConfigs]); // Re-run if polling state or sort configs change
+
+  // Handle manual refresh
+  const handleManualRefresh = () => {
+    console.log('🔄 Manual refresh triggered');
+    loadAllData();
+  };
+
+  // Format last updated time for tooltip
+  const getLastUpdatedText = () => {
+    if (!lastUpdated) return 'Never updated';
+    
+    // Format the time in user's local timezone
+    const timeOptions = {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    };
+    
+    const dateOptions = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    };
+    
+    const timeString = lastUpdated.toLocaleTimeString(undefined, timeOptions);
+    const dateString = lastUpdated.toLocaleDateString(undefined, dateOptions);
+    
+    // Check if it's today
+    const today = new Date();
+    const isToday = lastUpdated.toDateString() === today.toDateString();
+    
+    if (isToday) {
+      return `Last updated: Today at ${timeString}`;
+    } else {
+      return `Last updated: ${dateString} at ${timeString}`;
+    }
+  };
+
+  // Handle sorting for different tables
+  const handleSort = (sortKey, tableType) => {
+    console.log('🔄 Sorting by:', sortKey, 'for table:', tableType);
+    
+    setSortConfigs(prev => {
+      const currentConfig = prev[tableType];
+      const newDirection = currentConfig?.key === sortKey && currentConfig?.direction === 'desc' ? 'asc' : 'desc';
+      
+      const newConfigs = {
+        ...prev,
+        [tableType]: { key: sortKey, direction: newDirection }
+      };
+      
+      // Reload data with new sorting
+      loadAllData(sortKey, newDirection, tableType);
+      
+      return newConfigs;
+    });
   };
 
   // Calculate totals for the averages
@@ -238,9 +333,18 @@ function Dashboard() {
               <span className="storage-text">Storage Performance Dashboard</span>
             </div>
             <div className="header-controls">
-              <button onClick={loadAllData} className="refresh-button" title="Refresh Data">
+              <button 
+                onClick={handleManualRefresh} 
+                className="refresh-button" 
+                title={getLastUpdatedText()}
+              >
                 <Refresh size="16px" />
               </button>
+              {isPolling && (
+                <span className="polling-indicator" title="Auto-refresh every 30 seconds">
+                  ●
+                </span>
+              )}
             </div>
           </div>
         </header>
@@ -249,9 +353,16 @@ function Dashboard() {
           <DashboardSummary devices={enrichedData} />
           
           <Card margin={{ vertical: 'medium' }} elevation="small">
-            <CardBody pad="medium">
+            <CardBody pad="medium" style={{ position: 'relative' }}>
+              {isRefreshing && (
+                <div className="table-refresh-overlay">
+                  <div className="table-refresh-spinner"></div>
+                </div>
+              )}
               <StorageDeviceTable 
                 devices={enrichedData}
+                onSort={handleSort}
+                sortConfig={sortConfigs.main}
                 onViewDetails={handleViewDetails}
                 averageData={averageData}
               />
@@ -259,9 +370,16 @@ function Dashboard() {
           </Card>
           
           <Card margin={{ vertical: 'medium' }} elevation="small">
-            <CardBody pad="medium">
+            <CardBody pad="medium" style={{ position: 'relative' }}>
+              {isRefreshing && (
+                <div className="table-refresh-overlay">
+                  <div className="table-refresh-spinner"></div>
+                </div>
+              )}
               <SustainabilityTable 
                 devices={sustainabilityData.length > 0 ? sustainabilityData : enrichedData}
+                onSort={handleSort}
+                sortConfig={sortConfigs.sustainability}
                 onViewDetails={handleViewDetails}
                 averageData={averageData}
               />
@@ -269,9 +387,16 @@ function Dashboard() {
           </Card>
           
           <Card margin={{ vertical: 'medium' }} elevation="small">
-            <CardBody pad="medium">
+            <CardBody pad="medium" style={{ position: 'relative' }}>
+              {isRefreshing && (
+                <div className="table-refresh-overlay">
+                  <div className="table-refresh-spinner"></div>
+                </div>
+              )}
               <PerformanceTable 
                 devices={performanceData.length > 0 ? performanceData : enrichedData}
+                onSort={handleSort}
+                sortConfig={sortConfigs.performance}
                 onViewDetails={handleViewDetails}
                 averageData={averageData}
               />
@@ -279,9 +404,16 @@ function Dashboard() {
           </Card>
           
           <Card margin={{ vertical: 'medium' }} elevation="small">
-            <CardBody pad="medium">
+            <CardBody pad="medium" style={{ position: 'relative' }}>
+              {isRefreshing && (
+                <div className="table-refresh-overlay">
+                  <div className="table-refresh-spinner"></div>
+                </div>
+              )}
               <FeatureTable 
                 devices={featureData.length > 0 ? featureData : enrichedData}
+                onSort={handleSort}
+                sortConfig={sortConfigs.feature}
                 onViewDetails={handleViewDetails}
                 averageData={averageData}
               />

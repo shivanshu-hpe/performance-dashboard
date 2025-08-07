@@ -72,6 +72,7 @@ class StorageApiService {
           latency: 0.1,
           throughput: 6800,
           price: 45000,
+          dataReduction: "6:1",
           sustainability: {
             powerEfficiency: 92,
             carbonReduction: 78,
@@ -110,6 +111,7 @@ class StorageApiService {
           latency: 0.15,
           throughput: 6200,
           price: 38000,
+          dataReduction: "5:1",
           sustainability: {
             powerEfficiency: 89,
             carbonReduction: 75,
@@ -148,6 +150,7 @@ class StorageApiService {
           latency: 0.2,
           throughput: 5400,
           price: 32000,
+          dataReduction: "4:1",
           sustainability: {
             powerEfficiency: 85,
             carbonReduction: 72,
@@ -186,6 +189,7 @@ class StorageApiService {
           latency: 0.25,
           throughput: 4800,
           price: 28000,
+          dataReduction: "3:1",
           sustainability: {
             powerEfficiency: 82,
             carbonReduction: 68,
@@ -224,6 +228,7 @@ class StorageApiService {
           latency: 0.3,
           throughput: 3600,
           price: 24000,
+          dataReduction: "2:1",
           sustainability: {
             powerEfficiency: 78,
             carbonReduction: 65,
@@ -262,6 +267,7 @@ class StorageApiService {
           latency: 0.4,
           throughput: 2800,
           price: 18000,
+          dataReduction: "2:1",
           sustainability: {
             powerEfficiency: 75,
             carbonReduction: 62,
@@ -300,6 +306,7 @@ class StorageApiService {
           latency: 0.8,
           throughput: 3400,
           price: 18000,
+          dataReduction: "3:1",
           sustainability: {
             powerEfficiency: 68,
             carbonReduction: 58,
@@ -338,6 +345,7 @@ class StorageApiService {
           latency: 0.4,
           throughput: 4500,
           price: 28000,
+          dataReduction: "5:1",
           sustainability: {
             powerEfficiency: 78,
             carbonReduction: 68,
@@ -376,6 +384,7 @@ class StorageApiService {
           latency: 0.12,
           throughput: 5900,
           price: 42000,
+          dataReduction: "6:1",
           sustainability: {
             powerEfficiency: 88,
             carbonReduction: 73,
@@ -414,6 +423,7 @@ class StorageApiService {
           latency: 0.5,
           throughput: 4100,
           price: 22000,
+          dataReduction: "3:1",
           sustainability: {
             powerEfficiency: 72,
             carbonReduction: 62,
@@ -452,6 +462,7 @@ class StorageApiService {
           latency: 0.6,
           throughput: 4900,
           price: 35000,
+          dataReduction: "4:1",
           sustainability: {
             powerEfficiency: 80,
             carbonReduction: 70,
@@ -490,6 +501,7 @@ class StorageApiService {
           latency: 0.3,
           throughput: 5500,
           price: 38000,
+          dataReduction: "5:1",
           sustainability: {
             powerEfficiency: 84,
             carbonReduction: 74,
@@ -528,6 +540,7 @@ class StorageApiService {
           latency: 0.7,
           throughput: 3700,
           price: 25000,
+          dataReduction: "3:1",
           sustainability: {
             powerEfficiency: 70,
             carbonReduction: 60,
@@ -566,6 +579,7 @@ class StorageApiService {
           latency: 0.08,
           throughput: 6500,
           price: 55000,
+          dataReduction: "7:1",
           sustainability: {
             powerEfficiency: 90,
             carbonReduction: 76,
@@ -609,6 +623,7 @@ class StorageApiService {
           latency: 0.25,
           throughput: 5100,
           price: 45000,
+          dataReduction: "5:1",
           sustainability: {
             powerEfficiency: 82,
             carbonReduction: 72,
@@ -640,73 +655,171 @@ class StorageApiService {
     };
   }
 
+  // Helper method to build query string with sorting parameters
+  buildQueryString(sortBy = null, sortOrder = "desc") {
+    if (!sortBy) return "";
+    const params = new URLSearchParams({
+      sortBy,
+      sortOrder,
+    });
+    return `?${params.toString()}`;
+  }
+
+  // Sort data on client side (fallback for mock mode)
+  sortData(data, sortBy, sortOrder = "desc") {
+    if (!sortBy || !data || data.length === 0) return data;
+
+    return [...data].sort((a, b) => {
+      let aValue = a[sortBy];
+      let bValue = b[sortBy];
+
+      // Handle nested properties (e.g., 'sustainability.powerEfficiency')
+      if (sortBy.includes(".")) {
+        const keys = sortBy.split(".");
+        aValue = keys.reduce((obj, key) => obj?.[key], a);
+        bValue = keys.reduce((obj, key) => obj?.[key], b);
+      }
+
+      // Handle null/undefined values
+      if (aValue == null && bValue == null) return 0;
+      if (aValue == null) return sortOrder === "asc" ? -1 : 1;
+      if (bValue == null) return sortOrder === "asc" ? 1 : -1;
+
+      // Compare values
+      if (aValue < bValue) {
+        return sortOrder === "asc" ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return sortOrder === "asc" ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+
   // Fetch all storage devices
-  async getStorageDevices() {
+  async getStorageDevices(sortBy = null, sortOrder = "desc") {
     if (this.isMockMode) {
       console.log("📊 Using mock data for storage devices");
-      return this.getMockData().devices;
+      const data = this.getMockData().devices;
+      return this.sortData(data, sortBy, sortOrder);
     }
 
     try {
-      const data = await this.fetchFromApi("/storage/devices");
+      const queryString = this.buildQueryString(sortBy, sortOrder);
+      const data = await this.fetchFromApi(`/storage/devices${queryString}`);
       return data.devices || [];
     } catch (error) {
       console.warn("⚠️ Failed to fetch from API, falling back to mock data");
-      return this.getMockData().devices;
+      const data = this.getMockData().devices;
+      return this.sortData(data, sortBy, sortOrder);
     }
   }
 
   // Fetch sustainability metrics
-  async getSustainabilityMetrics() {
+  async getSustainabilityMetrics(sortBy = null, sortOrder = "desc") {
     if (this.isMockMode) {
       console.log("🌱 Using mock data for sustainability metrics");
-      return this.getMockData().devices;
+      const data = this.getMockData().devices;
+      return this.sortData(data, sortBy, sortOrder);
     }
 
     try {
-      const data = await this.fetchFromApi("/sustainability/metrics");
+      const queryString = this.buildQueryString(sortBy, sortOrder);
+      const data = await this.fetchFromApi(
+        `/sustainability/metrics${queryString}`
+      );
       return data.devices || [];
     } catch (error) {
       console.warn(
         "⚠️ Failed to fetch sustainability data, falling back to mock data"
       );
-      return this.getMockData().devices;
+      const data = this.getMockData().devices;
+      return this.sortData(data, sortBy, sortOrder);
     }
   }
 
   // Fetch performance metrics
-  async getPerformanceMetrics() {
+  async getPerformanceMetrics(sortBy = null, sortOrder = "desc") {
     if (this.isMockMode) {
       console.log("⚡ Using mock data for performance metrics");
-      return this.getMockData().devices;
+      const data = this.getMockData().devices;
+      return this.sortData(data, sortBy, sortOrder);
     }
 
     try {
-      const data = await this.fetchFromApi("/performance/metrics");
+      const queryString = this.buildQueryString(sortBy, sortOrder);
+      const data = await this.fetchFromApi(
+        `/performance/metrics${queryString}`
+      );
       return data.devices || [];
     } catch (error) {
       console.warn(
         "⚠️ Failed to fetch performance data, falling back to mock data"
       );
-      return this.getMockData().devices;
+      const data = this.getMockData().devices;
+      return this.sortData(data, sortBy, sortOrder);
     }
   }
 
   // Fetch feature comparison data
-  async getFeatureComparison() {
+  async getFeatureComparison(sortBy = null, sortOrder = "desc") {
     if (this.isMockMode) {
       console.log("🔧 Using mock data for feature comparison");
-      return this.getMockData().devices;
+      const data = this.getMockData().devices;
+      return this.sortData(data, sortBy, sortOrder);
     }
 
     try {
-      const data = await this.fetchFromApi("/features/comparison");
-      return data.devices || [];
+      const queryString = this.buildQueryString(sortBy, sortOrder);
+      const data = await this.fetchFromApi(
+        `/features/comparison${queryString}`
+      );
+
+      // Transform API data to ensure dataReduction field exists
+      const transformedDevices = (data.devices || []).map((device) => {
+        // If dataReduction is missing but we have features.dataManagement data
+        if (!device.dataReduction && device.features?.dataManagement) {
+          const { deduplication, compression } = device.features.dataManagement;
+
+          // Create dataReduction based on deduplication and compression levels
+          let ratio = "1:1";
+          if (deduplication === "Advanced" && compression === "Advanced") {
+            ratio = "6:1";
+          } else if (
+            deduplication === "Advanced" &&
+            compression === "Standard"
+          ) {
+            ratio = "5:1";
+          } else if (
+            deduplication === "Standard" &&
+            compression === "Advanced"
+          ) {
+            ratio = "4:1";
+          } else if (
+            deduplication === "Standard" &&
+            compression === "Standard"
+          ) {
+            ratio = "3:1";
+          } else if (deduplication === "Basic" || compression === "Standard") {
+            ratio = "2:1";
+          }
+
+          device.dataReduction = ratio;
+          console.log(
+            `🔧 Generated dataReduction "${ratio}" for device ${device.name} based on ${deduplication} deduplication and ${compression} compression`
+          );
+        }
+
+        return device;
+      });
+
+      return this.sortData(transformedDevices, sortBy, sortOrder);
     } catch (error) {
       console.warn(
         "⚠️ Failed to fetch feature data, falling back to mock data"
       );
-      return this.getMockData().devices;
+      const data = this.getMockData().devices;
+      return this.sortData(data, sortBy, sortOrder);
     }
   }
 
