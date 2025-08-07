@@ -4,8 +4,9 @@ import PerformanceFeedbackModal from './PerformanceFeedbackModal';
 import Pagination from './Pagination';
 import usePagination from '../hooks/usePagination';
 import { getPerformanceLevel, formatNumber } from '../utils/scoreUtils';
+import SortableHeader from './SortableHeader';
 
-const PerformanceTable = ({ devices, onViewDetails, averageData }) => {
+const PerformanceTable = ({ devices, onViewDetails, averageData, sortBy, sortOrder, onSort }) => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -47,7 +48,13 @@ const PerformanceTable = ({ devices, onViewDetails, averageData }) => {
           <thead>
             <tr>
               <th>Product Name</th>
-              <th>Performance Score</th>
+              <SortableHeader 
+                label="Performance Score" 
+                sortKey="score" 
+                currentSortBy={sortBy} 
+                currentSortOrder={sortOrder} 
+                onSort={onSort} 
+              />
               <th>Capacity</th>
               <th>Read Speed (MB/s)</th>
               <th>Write Speed (MB/s)</th>

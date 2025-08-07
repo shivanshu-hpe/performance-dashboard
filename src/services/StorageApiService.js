@@ -640,74 +640,115 @@ class StorageApiService {
     };
   }
 
-  // Fetch all storage devices
-  async getStorageDevices() {
+  // Fetch all storage devices with optional sorting
+  async getStorageDevices(sortBy = 'deviceScore', sortOrder = 'asc') {
     if (this.isMockMode) {
       console.log("📊 Using mock data for storage devices");
-      return this.getMockData().devices;
+      const devices = this.getMockData().devices;
+      return this.sortDevicesLocally(devices, sortBy, sortOrder);
     }
 
     try {
-      const data = await this.fetchFromApi("/storage/devices");
+      const endpoint = `/storage/devices?sortBy=${sortBy}&sortOrder=${sortOrder}`;
+      const data = await this.fetchFromApi(endpoint);
       return data.devices || [];
     } catch (error) {
       console.warn("⚠️ Failed to fetch from API, falling back to mock data");
-      return this.getMockData().devices;
+      const devices = this.getMockData().devices;
+      return this.sortDevicesLocally(devices, sortBy, sortOrder);
     }
   }
 
-  // Fetch sustainability metrics
-  async getSustainabilityMetrics() {
+  // Fetch sustainability metrics with optional sorting
+  async getSustainabilityMetrics(sortBy = 'greenScore', sortOrder = 'asc') {
     if (this.isMockMode) {
       console.log("🌱 Using mock data for sustainability metrics");
-      return this.getMockData().devices;
+      const devices = this.getMockData().devices;
+      return this.sortDevicesLocally(devices, sortBy, sortOrder);
     }
 
     try {
-      const data = await this.fetchFromApi("/sustainability/metrics");
+      const endpoint = `/sustainability/metrics?sortBy=${sortBy}&sortOrder=${sortOrder}`;
+      const data = await this.fetchFromApi(endpoint);
       return data.devices || [];
     } catch (error) {
       console.warn(
         "⚠️ Failed to fetch sustainability data, falling back to mock data"
       );
-      return this.getMockData().devices;
+      const devices = this.getMockData().devices;
+      return this.sortDevicesLocally(devices, sortBy, sortOrder);
     }
   }
 
-  // Fetch performance metrics
-  async getPerformanceMetrics() {
+  // Fetch performance metrics with optional sorting
+  async getPerformanceMetrics(sortBy = 'score', sortOrder = 'asc') {
     if (this.isMockMode) {
       console.log("⚡ Using mock data for performance metrics");
-      return this.getMockData().devices;
+      const devices = this.getMockData().devices;
+      return this.sortDevicesLocally(devices, sortBy, sortOrder);
     }
 
     try {
-      const data = await this.fetchFromApi("/performance/metrics");
+      const endpoint = `/performance/metrics?sortBy=${sortBy}&sortOrder=${sortOrder}`;
+      const data = await this.fetchFromApi(endpoint);
       return data.devices || [];
     } catch (error) {
       console.warn(
         "⚠️ Failed to fetch performance data, falling back to mock data"
       );
-      return this.getMockData().devices;
+      const devices = this.getMockData().devices;
+      return this.sortDevicesLocally(devices, sortBy, sortOrder);
     }
   }
 
-  // Fetch feature comparison data
-  async getFeatureComparison() {
+  // Fetch feature comparison data with optional sorting
+  async getFeatureComparison(sortBy = 'featureScore', sortOrder = 'asc') {
     if (this.isMockMode) {
       console.log("🔧 Using mock data for feature comparison");
-      return this.getMockData().devices;
+      const devices = this.getMockData().devices;
+      return this.sortDevicesLocally(devices, sortBy, sortOrder);
     }
 
     try {
-      const data = await this.fetchFromApi("/features/comparison");
+      const endpoint = `/features/comparison?sortBy=${sortBy}&sortOrder=${sortOrder}`;
+      const data = await this.fetchFromApi(endpoint);
       return data.devices || [];
     } catch (error) {
       console.warn(
         "⚠️ Failed to fetch feature data, falling back to mock data"
       );
-      return this.getMockData().devices;
+      const devices = this.getMockData().devices;
+      return this.sortDevicesLocally(devices, sortBy, sortOrder);
     }
+  }
+
+  // Local sorting function for mock data
+  sortDevicesLocally(devices, sortBy, sortOrder) {
+    if (!devices || devices.length === 0) return [];
+    
+    return devices.sort((a, b) => {
+      let valueA = a[sortBy];
+      let valueB = b[sortBy];
+
+      // Handle different data types
+      if (typeof valueA === 'string' && typeof valueB === 'string') {
+        valueA = valueA.toLowerCase();
+        valueB = valueB.toLowerCase();
+        
+        if (sortOrder === 'desc') {
+          return valueB.localeCompare(valueA);
+        } else {
+          return valueA.localeCompare(valueB);
+        }
+      } else {
+        // Numeric comparison
+        if (sortOrder === 'desc') {
+          return valueB - valueA;
+        } else {
+          return valueA - valueB;
+        }
+      }
+    });
   }
 
   // Calculate averages from device data

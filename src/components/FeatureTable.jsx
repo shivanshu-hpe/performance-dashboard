@@ -4,8 +4,9 @@ import FeatureFeedbackModal from './FeatureFeedbackModal';
 import Pagination from './Pagination';
 import usePagination from '../hooks/usePagination';
 import { getPerformanceLevel } from '../utils/scoreUtils';
+import SortableHeader from './SortableHeader';
 
-const FeatureTable = ({ devices, onViewDetails, averageData }) => {
+const FeatureTable = ({ devices, onViewDetails, averageData, sortBy, sortOrder, onSort }) => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -51,7 +52,13 @@ const FeatureTable = ({ devices, onViewDetails, averageData }) => {
           <thead>
             <tr>
               <th>Product Name</th>
-              <th>Feature Score</th>
+              <SortableHeader 
+                label="Feature Score" 
+                sortKey="featureScore" 
+                currentSortBy={sortBy} 
+                currentSortOrder={sortOrder} 
+                onSort={onSort} 
+              />
               <th>Data Reduction</th>
               <th>Snapshots</th>
               <th>Replication</th>

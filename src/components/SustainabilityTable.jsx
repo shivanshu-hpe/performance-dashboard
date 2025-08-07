@@ -4,8 +4,9 @@ import SustainabilityFeedbackModal from './SustainabilityFeedbackModal';
 import Pagination from './Pagination';
 import usePagination from '../hooks/usePagination';
 import { getPerformanceLevel } from '../utils/scoreUtils';
+import SortableHeader from './SortableHeader';
 
-const SustainabilityTable = ({ devices, onViewDetails, averageData }) => {
+const SustainabilityTable = ({ devices, onViewDetails, averageData, sortBy, sortOrder, onSort }) => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -47,7 +48,13 @@ const SustainabilityTable = ({ devices, onViewDetails, averageData }) => {
           <thead>
             <tr>
               <th>Product Name</th>
-              <th>Green Score</th>
+              <SortableHeader 
+                label="Green Score" 
+                sortKey="greenScore" 
+                currentSortBy={sortBy} 
+                currentSortOrder={sortOrder} 
+                onSort={onSort} 
+              />
               <th>Power Efficiency</th>
               <th>Carbon Reduction %</th>
               <th>Feedback</th>

@@ -1,0 +1,32 @@
+.sort-controls {
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+  margin-bottom: 16px;
+}
+
+.sort-order-button {
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.sort-order-button:hover {
+  background-color: #e9ecef;
+}
+
+.sort-controls label {
+  margin-bottom: 0;
+  color: #495057;
+}
+
+.sort-controls .grommet-select {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.sort-controls .grommet-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}

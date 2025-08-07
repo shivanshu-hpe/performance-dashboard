@@ -5,8 +5,9 @@ import Pagination from './Pagination';
 import usePagination from '../hooks/usePagination';
 import { StatusGood } from 'grommet-icons';
 import { getPerformanceLevel, formatNumber } from '../utils/scoreUtils';
+import SortableHeader from './SortableHeader';
 
-const StorageDeviceTable = ({ devices, onViewDetails, averageData }) => {
+const StorageDeviceTable = ({ devices, onViewDetails, averageData, sortBy, sortOrder, onSort }) => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   
@@ -49,10 +50,34 @@ const StorageDeviceTable = ({ devices, onViewDetails, averageData }) => {
             <tr>
               <th>Product Name</th>
               <th>Storage Tier</th>
-              <th>Device Score</th>
-              <th>Performance Score</th>
-              <th>Green Score</th>
-              <th>Feature Score</th>
+              <SortableHeader 
+                label="Device Score" 
+                sortKey="deviceScore" 
+                currentSortBy={sortBy} 
+                currentSortOrder={sortOrder} 
+                onSort={onSort} 
+              />
+              <SortableHeader 
+                label="Performance Score" 
+                sortKey="score" 
+                currentSortBy={sortBy} 
+                currentSortOrder={sortOrder} 
+                onSort={onSort} 
+              />
+              <SortableHeader 
+                label="Green Score" 
+                sortKey="greenScore" 
+                currentSortBy={sortBy} 
+                currentSortOrder={sortOrder} 
+                onSort={onSort} 
+              />
+              <SortableHeader 
+                label="Feature Score" 
+                sortKey="featureScore" 
+                currentSortBy={sortBy} 
+                currentSortOrder={sortOrder} 
+                onSort={onSort} 
+              />
               <th>Feedback</th>
             </tr>
           </thead>

@@ -72,24 +72,35 @@ function Dashboard() {
   const [performanceData, setPerformanceData] = useState([]);
   const [featureData, setFeatureData] = useState([]);
   
+  // Sorting state for each table
+  const [storageSort, setStorageSort] = useState({ sortBy: 'deviceScore', sortOrder: 'asc' });
+  const [sustainabilitySort, setSustainabilitySort] = useState({ sortBy: 'greenScore', sortOrder: 'asc' });
+  const [performanceSort, setPerformanceSort] = useState({ sortBy: 'score', sortOrder: 'asc' });
+  const [featureSort, setFeatureSort] = useState({ sortBy: 'featureScore', sortOrder: 'asc' });
+  
   // Loading and error states
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Load all data from API or mock
-  const loadAllData = async () => {
+  // Load all data from API or mock with sorting
+  const loadAllData = async (
+    storageSortParams = storageSort,
+    sustainabilitySortParams = sustainabilitySort,
+    performanceSortParams = performanceSort,
+    featureSortParams = featureSort
+  ) => {
     setLoading(true);
     setError(null);
 
     try {
       console.log('🔄 Loading storage data...');
       
-      // Load all data in parallel for better performance
+      // Load all data in parallel for better performance with sorting
       const [devices, sustainability, performance, features] = await Promise.all([
-        StorageApiService.getStorageDevices(),
-        StorageApiService.getSustainabilityMetrics(),
-        StorageApiService.getPerformanceMetrics(),
-        StorageApiService.getFeatureComparison()
+        StorageApiService.getStorageDevices(storageSortParams.sortBy, storageSortParams.sortOrder),
+        StorageApiService.getSustainabilityMetrics(sustainabilitySortParams.sortBy, sustainabilitySortParams.sortOrder),
+        StorageApiService.getPerformanceMetrics(performanceSortParams.sortBy, performanceSortParams.sortOrder),
+        StorageApiService.getFeatureComparison(featureSortParams.sortBy, featureSortParams.sortOrder),
       ]);
 
       console.log('✅ Data loaded successfully:', {
@@ -116,6 +127,31 @@ function Dashboard() {
   useEffect(() => {
     loadAllData();
   }, []);
+
+  // Sorting handlers for each table
+  const handleStorageSortChange = (sortBy, sortOrder) => {
+    const newSort = { sortBy, sortOrder };
+    setStorageSort(newSort);
+    loadAllData(newSort, sustainabilitySort, performanceSort, featureSort);
+  };
+
+  const handleSustainabilitySortChange = (sortBy, sortOrder) => {
+    const newSort = { sortBy, sortOrder };
+    setSustainabilitySort(newSort);
+    loadAllData(storageSort, newSort, performanceSort, featureSort);
+  };
+
+  const handlePerformanceSortChange = (sortBy, sortOrder) => {
+    const newSort = { sortBy, sortOrder };
+    setPerformanceSort(newSort);
+    loadAllData(storageSort, sustainabilitySort, newSort, featureSort);
+  };
+
+  const handleFeatureSortChange = (sortBy, sortOrder) => {
+    const newSort = { sortBy, sortOrder };
+    setFeatureSort(newSort);
+    loadAllData(storageSort, sustainabilitySort, performanceSort, newSort);
+  };
 
   // Handle system selection (navigate to detail page)
   const handleSystemSelect = (system) => {
@@ -254,6 +290,9 @@ function Dashboard() {
                 devices={enrichedData}
                 onViewDetails={handleViewDetails}
                 averageData={averageData}
+                sortBy={storageSort.sortBy}
+                sortOrder={storageSort.sortOrder}
+                onSort={handleStorageSortChange}
               />
             </CardBody>
           </Card>
@@ -264,6 +303,9 @@ function Dashboard() {
                 devices={sustainabilityData.length > 0 ? sustainabilityData : enrichedData}
                 onViewDetails={handleViewDetails}
                 averageData={averageData}
+                sortBy={sustainabilitySort.sortBy}
+                sortOrder={sustainabilitySort.sortOrder}
+                onSort={handleSustainabilitySortChange}
               />
             </CardBody>
           </Card>
@@ -274,6 +316,9 @@ function Dashboard() {
                 devices={performanceData.length > 0 ? performanceData : enrichedData}
                 onViewDetails={handleViewDetails}
                 averageData={averageData}
+                sortBy={performanceSort.sortBy}
+                sortOrder={performanceSort.sortOrder}
+                onSort={handlePerformanceSortChange}
               />
             </CardBody>
           </Card>
@@ -284,6 +329,9 @@ function Dashboard() {
                 devices={featureData.length > 0 ? featureData : enrichedData}
                 onViewDetails={handleViewDetails}
                 averageData={averageData}
+                sortBy={featureSort.sortBy}
+                sortOrder={featureSort.sortOrder}
+                onSort={handleFeatureSortChange}
               />
             </CardBody>
           </Card>
