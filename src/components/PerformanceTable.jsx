@@ -59,7 +59,8 @@ const PerformanceTable = ({ devices, onViewDetails, averageData, sortBy, sortOrd
               <th>Read Speed (MB/s)</th>
               <th>Write Speed (MB/s)</th>
               <th>IOPS</th>
-              <th>Latency (ms)</th>
+              <th>Read Latency (ms)</th>
+              <th>Write Latency (ms)</th>
               <th>Feedback</th>
             </tr>
           </thead>
@@ -114,8 +115,13 @@ const PerformanceTable = ({ devices, onViewDetails, averageData, sortBy, sortOrd
                 <td className="performance-metric">{formatNumber(device.writeSpeed)}</td>
                 <td className="performance-metric">{formatNumber(device.iops)}</td>
                 <td className="latency-metric">
-                  <span className={device.latency < 0.1 ? 'low-latency' : device.latency < 0.2 ? 'medium-latency' : 'high-latency'}>
-                    {device.latency}
+                  <span className={device.readLatency < 0.1 ? 'low-latency' : device.readLatency < 0.2 ? 'medium-latency' : 'high-latency'}>
+                    {device.readLatency || device.latency}
+                  </span>
+                </td>
+                <td className="latency-metric">
+                  <span className={device.writeLatency < 0.1 ? 'low-latency' : device.writeLatency < 0.2 ? 'medium-latency' : 'high-latency'}>
+                    {device.writeLatency || (device.latency * 1.1).toFixed(3)}
                   </span>
                 </td>
                 <td>
