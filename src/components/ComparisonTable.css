@@ -94,6 +94,59 @@
 .capacity {
   font-weight: 600;
   color: #01A982;
+  min-width: 120px;
+}
+
+.capacity-display {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.capacity-text {
+  font-weight: 600;
+  color: #333;
+  font-size: 13px;
+  text-align: center;
+}
+
+.used-capacity, .total-capacity {
+  font-weight: 600;
+  color: #333;
+  font-size: 13px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.total-capacity {
+  color: #01A982;
+}
+
+.capacity-bar {
+  width: 100%;
+  height: 6px;
+  background-color: #e0e0e0;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.capacity-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.capacity-fill.low-utilization {
+  background: #01A982;
+}
+
+.capacity-fill.medium-utilization {
+  background: #FF9800;
+}
+
+.capacity-fill.high-utilization {
+  background: #F44336;
 }
 
 .latency-metric .low-latency {
@@ -207,7 +260,7 @@
 
 .comparison-table th {
   padding: 15px 12px;
-  text-align: left;
+  text-align: center;
   font-weight: 600;
   color: #37474f;
   white-space: nowrap;
@@ -251,6 +304,7 @@
   padding: 12px;
   border-bottom: 1px solid #E8E8E8;
   vertical-align: middle;
+  text-align: center;
 }
 
 .comparison-table .device-row:hover {
@@ -261,6 +315,7 @@
   font-weight: 600;
   color: #37474f;
   min-width: 200px;
+  text-align: left;
 }
 
 .comparison-table .device-name-link {

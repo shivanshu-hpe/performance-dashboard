@@ -87,7 +87,29 @@ const PerformanceTable = ({ devices, onViewDetails, averageData, sortBy, sortOrd
                     </div>
                   </div>
                 </td>
-                <td className="capacity">{device.capacity}</td>
+                <td className="capacity">
+                  <div className="capacity-display">
+                    {device.usedCapacityTB && device.totalCapacityTB ? (
+                      <>
+                        <span className="capacity-text">
+                          {device.usedCapacityTB}TB / {device.totalCapacityTB}TB
+                        </span>
+                        <div className="capacity-bar">
+                          <div 
+                            className="capacity-fill"
+                            style={{ 
+                              width: `${(device.usedCapacityTB / device.totalCapacityTB) * 100}%`,
+                              backgroundColor: device.usedCapacityTB / device.totalCapacityTB > 0.8 ? '#F44336' : 
+                                             device.usedCapacityTB / device.totalCapacityTB > 0.6 ? '#FF9800' : '#01A982'
+                            }}
+                          ></div>
+                        </div>
+                      </>
+                    ) : (
+                      <span className="capacity-text">{device.capacity}</span>
+                    )}
+                  </div>
+                </td>
                 <td className="performance-metric">{formatNumber(device.readSpeed)}</td>
                 <td className="performance-metric">{formatNumber(device.writeSpeed)}</td>
                 <td className="performance-metric">{formatNumber(device.iops)}</td>
