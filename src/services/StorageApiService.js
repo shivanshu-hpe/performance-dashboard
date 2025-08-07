@@ -55,593 +55,596 @@ class StorageApiService {
 
   // Mock data for development
   getMockData() {
-    return {
-      devices: [
-        {
-          id: 1,
-          name: "BLR-CZ234402KF",
-          type: "HPE GreenLake For File Storage",
-          deviceScore: 98,
-          score: 99,
-          greenScore: 98,
-          featureScore: 97,
-          capacity: "100TB",
-          readSpeed: 3500,
-          writeSpeed: 3200,
-          iops: 120000,
-          latency: 0.1,
-          throughput: 6800,
-          price: 45000,
-          sustainability: {
-            powerEfficiency: 92,
-            carbonReduction: 78,
-            circularEconomy: 85,
+    const devices = [
+      {
+        id: 1,
+        name: "BLR-CZ234402KF",
+        type: "HPE GreenLake For File Storage",
+        deviceScore: 98,
+        score: 99,
+        greenScore: 98,
+        featureScore: 97,
+        capacity: "100TB",
+        readSpeed: 3500,
+        writeSpeed: 3200,
+        iops: 120000,
+        latency: 0.1,
+        throughput: 6800,
+        price: 45000,
+        sustainability: {
+          powerEfficiency: 92,
+          carbonReduction: 78,
+          circularEconomy: 85,
+        },
+        features: {
+          dataManagement: {
+            deduplication: "Advanced",
+            compression: "Advanced",
+            tiering: "Automated",
           },
-          features: {
-            dataManagement: {
-              deduplication: "Advanced",
-              compression: "Advanced",
-              tiering: "Automated",
-            },
-            security: {
-              encryption: "AES-256",
-              accessControl: ["RBAC", "MFA"],
-            },
-            availability: ["Auto-failover", "Hot-spare", "RAID"],
-            management: ["REST API", "Cloud Integration", "AI Analytics"],
-            protocols: ["NFS", "SMB", "REST API"],
+          security: {
+            encryption: "AES-256",
+            accessControl: ["RBAC", "MFA"],
           },
-          snapshots: "Yes",
-          replication: "Yes",
+          availability: ["Auto-failover", "Hot-spare", "RAID"],
+          management: ["REST API", "Cloud Integration", "AI Analytics"],
           protocols: ["NFS", "SMB", "REST API"],
         },
-        {
-          id: 2,
-          name: "BLR-CZ234403MX",
-          type: "HPE GreenLake For File Storage",
-          deviceScore: 96,
-          score: 98,
-          greenScore: 96,
-          featureScore: 95,
-          capacity: "80TB",
-          readSpeed: 3200,
-          writeSpeed: 2900,
-          iops: 110000,
-          latency: 0.15,
-          throughput: 6200,
-          price: 38000,
-          sustainability: {
-            powerEfficiency: 89,
-            carbonReduction: 75,
-            circularEconomy: 82,
+        snapshots: "Yes",
+        replication: "Yes",
+        protocols: ["NFS", "SMB", "REST API"],
+      },
+      {
+        id: 2,
+        name: "BLR-CZ234403MX",
+        type: "HPE GreenLake For File Storage",
+        deviceScore: 96,
+        score: 98,
+        greenScore: 96,
+        featureScore: 95,
+        capacity: "80TB",
+        readSpeed: 3200,
+        writeSpeed: 2900,
+        iops: 110000,
+        latency: 0.15,
+        throughput: 6200,
+        price: 38000,
+        sustainability: {
+          powerEfficiency: 89,
+          carbonReduction: 75,
+          circularEconomy: 82,
+        },
+        features: {
+          dataManagement: {
+            deduplication: "Advanced",
+            compression: "Advanced",
+            tiering: "Automated",
           },
-          features: {
-            dataManagement: {
-              deduplication: "Advanced",
-              compression: "Advanced",
-              tiering: "Automated",
-            },
-            security: {
-              encryption: "AES-256",
-              accessControl: ["RBAC"],
-            },
-            availability: ["Auto-failover", "Hot-spare"],
-            management: ["REST API", "Cloud Integration"],
-            protocols: ["NFS", "SMB", "iSCSI"],
+          security: {
+            encryption: "AES-256",
+            accessControl: ["RBAC"],
           },
-          snapshots: "Yes",
-          replication: "Yes",
+          availability: ["Auto-failover", "Hot-spare"],
+          management: ["REST API", "Cloud Integration"],
           protocols: ["NFS", "SMB", "iSCSI"],
         },
-        {
-          id: 3,
-          name: "BLR-CZ234404PL",
-          type: "HPE GreenLake For File Storage",
-          deviceScore: 94,
-          score: 96,
-          greenScore: 94,
-          featureScore: 92,
-          capacity: "60TB",
-          readSpeed: 2800,
-          writeSpeed: 2500,
-          iops: 95000,
-          latency: 0.2,
-          throughput: 5400,
-          price: 32000,
-          sustainability: {
-            powerEfficiency: 85,
-            carbonReduction: 72,
-            circularEconomy: 78,
+        snapshots: "Yes",
+        replication: "Yes",
+        protocols: ["NFS", "SMB", "iSCSI"],
+      },
+      {
+        id: 3,
+        name: "BLR-CZ234404PL",
+        type: "HPE GreenLake For File Storage",
+        deviceScore: 94,
+        score: 96,
+        greenScore: 94,
+        featureScore: 92,
+        capacity: "60TB",
+        readSpeed: 2800,
+        writeSpeed: 2500,
+        iops: 95000,
+        latency: 0.2,
+        throughput: 5400,
+        price: 32000,
+        sustainability: {
+          powerEfficiency: 85,
+          carbonReduction: 72,
+          circularEconomy: 78,
+        },
+        features: {
+          dataManagement: {
+            deduplication: "Standard",
+            compression: "Advanced",
+            tiering: "Manual",
           },
-          features: {
-            dataManagement: {
-              deduplication: "Standard",
-              compression: "Advanced",
-              tiering: "Manual",
-            },
-            security: {
-              encryption: "AES-256",
-              accessControl: ["RBAC"],
-            },
-            availability: ["Hot-spare"],
-            management: ["REST API"],
-            protocols: ["NFS", "SMB"],
+          security: {
+            encryption: "AES-256",
+            accessControl: ["RBAC"],
           },
-          snapshots: "Yes",
-          replication: "Optional",
+          availability: ["Hot-spare"],
+          management: ["REST API"],
           protocols: ["NFS", "SMB"],
         },
-        {
-          id: 4,
-          name: "BLR-CZ234405RT",
-          type: "HPE GreenLake For File Storage",
-          deviceScore: 91,
-          score: 94,
-          greenScore: 92,
-          featureScore: 88,
-          capacity: "50TB",
-          readSpeed: 2400,
-          writeSpeed: 2100,
-          iops: 80000,
-          latency: 0.25,
-          throughput: 4800,
-          price: 28000,
-          sustainability: {
-            powerEfficiency: 82,
-            carbonReduction: 68,
-            circularEconomy: 75,
+        snapshots: "Yes",
+        replication: "Optional",
+        protocols: ["NFS", "SMB"],
+      },
+      {
+        id: 4,
+        name: "BLR-CZ234405RT",
+        type: "HPE GreenLake For File Storage",
+        deviceScore: 91,
+        score: 94,
+        greenScore: 92,
+        featureScore: 88,
+        capacity: "50TB",
+        readSpeed: 2400,
+        writeSpeed: 2100,
+        iops: 80000,
+        latency: 0.25,
+        throughput: 4800,
+        price: 28000,
+        sustainability: {
+          powerEfficiency: 82,
+          carbonReduction: 68,
+          circularEconomy: 75,
+        },
+        features: {
+          dataManagement: {
+            deduplication: "Standard",
+            compression: "Standard",
+            tiering: "Manual",
           },
-          features: {
-            dataManagement: {
-              deduplication: "Standard",
-              compression: "Standard",
-              tiering: "Manual",
-            },
-            security: {
-              encryption: "AES-128",
-              accessControl: ["Basic"],
-            },
-            availability: ["Hot-spare"],
-            management: ["Web UI"],
-            protocols: ["NFS", "SMB"],
+          security: {
+            encryption: "AES-128",
+            accessControl: ["Basic"],
           },
-          snapshots: "Yes",
-          replication: "No",
+          availability: ["Hot-spare"],
+          management: ["Web UI"],
           protocols: ["NFS", "SMB"],
         },
-        {
-          id: 5,
-          name: "BLR-CZ234406WH",
-          type: "HPE GreenLake For File Storage",
-          deviceScore: 87,
-          score: 87,
-          greenScore: 89,
-          featureScore: 85,
-          capacity: "30TB",
-          readSpeed: 2000,
-          writeSpeed: 1800,
-          iops: 65000,
-          latency: 0.3,
-          throughput: 3600,
-          price: 24000,
-          sustainability: {
-            powerEfficiency: 78,
-            carbonReduction: 65,
-            circularEconomy: 72,
+        snapshots: "Yes",
+        replication: "No",
+        protocols: ["NFS", "SMB"],
+      },
+      {
+        id: 5,
+        name: "BLR-CZ234406WH",
+        type: "HPE GreenLake For File Storage",
+        deviceScore: 87,
+        score: 87,
+        greenScore: 89,
+        featureScore: 85,
+        capacity: "30TB",
+        readSpeed: 2000,
+        writeSpeed: 1800,
+        iops: 65000,
+        latency: 0.3,
+        throughput: 3600,
+        price: 24000,
+        sustainability: {
+          powerEfficiency: 78,
+          carbonReduction: 65,
+          circularEconomy: 72,
+        },
+        features: {
+          dataManagement: {
+            deduplication: "Basic",
+            compression: "Standard",
+            tiering: "None",
           },
-          features: {
-            dataManagement: {
-              deduplication: "Basic",
-              compression: "Standard",
-              tiering: "None",
-            },
-            security: {
-              encryption: "AES-128",
-              accessControl: ["Basic"],
-            },
-            availability: ["Basic"],
-            management: ["Web UI"],
-            protocols: ["NFS", "SMB"],
+          security: {
+            encryption: "AES-128",
+            accessControl: ["Basic"],
           },
-          snapshots: "Optional",
-          replication: "No",
+          availability: ["Basic"],
+          management: ["Web UI"],
           protocols: ["NFS", "SMB"],
         },
-        {
-          id: 6,
-          name: "BLR-CZ234407NQ",
-          type: "HPE GreenLake For File Storage",
-          deviceScore: 79,
-          score: 78,
-          greenScore: 84,
-          featureScore: 75,
-          capacity: "20TB",
-          readSpeed: 1600,
-          writeSpeed: 1400,
-          iops: 50000,
-          latency: 0.4,
-          throughput: 2800,
-          price: 18000,
-          sustainability: {
-            powerEfficiency: 75,
-            carbonReduction: 62,
-            circularEconomy: 68,
+        snapshots: "Optional",
+        replication: "No",
+        protocols: ["NFS", "SMB"],
+      },
+      {
+        id: 6,
+        name: "BLR-CZ234407NQ",
+        type: "HPE GreenLake For File Storage",
+        deviceScore: 79,
+        score: 78,
+        greenScore: 84,
+        featureScore: 75,
+        capacity: "20TB",
+        readSpeed: 1600,
+        writeSpeed: 1400,
+        iops: 50000,
+        latency: 0.4,
+        throughput: 2800,
+        price: 18000,
+        sustainability: {
+          powerEfficiency: 75,
+          carbonReduction: 62,
+          circularEconomy: 68,
+        },
+        features: {
+          dataManagement: {
+            deduplication: "Basic",
+            compression: "Basic",
+            tiering: "None",
           },
-          features: {
-            dataManagement: {
-              deduplication: "Basic",
-              compression: "Basic",
-              tiering: "None",
-            },
-            security: {
-              encryption: "Basic",
-              accessControl: ["Basic"],
-            },
-            availability: ["Basic"],
-            management: ["Web UI"],
-            protocols: ["NFS"],
+          security: {
+            encryption: "Basic",
+            accessControl: ["Basic"],
           },
-          snapshots: "No",
-          replication: "No",
+          availability: ["Basic"],
+          management: ["Web UI"],
           protocols: ["NFS"],
         },
-        {
-          id: 7,
-          name: "BLR-CZ234408LK",
-          type: "HPE GreenLake For File Storage",
-          deviceScore: 78,
-          score: 80,
-          greenScore: 76,
-          featureScore: 74,
-          capacity: "24TB",
-          readSpeed: 1800,
-          writeSpeed: 1600,
-          iops: 45000,
-          latency: 0.8,
-          throughput: 3400,
-          price: 18000,
-          sustainability: {
-            powerEfficiency: 68,
-            carbonReduction: 58,
-            circularEconomy: 65,
+        snapshots: "No",
+        replication: "No",
+        protocols: ["NFS"],
+      },
+      {
+        id: 7,
+        name: "BLR-CZ234408LK",
+        type: "HPE GreenLake For File Storage",
+        deviceScore: 78,
+        score: 80,
+        greenScore: 76,
+        featureScore: 74,
+        capacity: "24TB",
+        readSpeed: 1800,
+        writeSpeed: 1600,
+        iops: 45000,
+        latency: 0.8,
+        throughput: 3400,
+        price: 18000,
+        sustainability: {
+          powerEfficiency: 68,
+          carbonReduction: 58,
+          circularEconomy: 65,
+        },
+        features: {
+          dataManagement: {
+            deduplication: "Basic",
+            compression: "Standard",
+            tiering: "None",
           },
-          features: {
-            dataManagement: {
-              deduplication: "Basic",
-              compression: "Standard",
-              tiering: "None",
-            },
-            security: {
-              encryption: "Basic",
-              accessControl: ["Basic"],
-            },
-            availability: ["Basic"],
-            management: ["Web UI", "SNMP"],
-            protocols: ["SMB", "NFS"],
+          security: {
+            encryption: "Basic",
+            accessControl: ["Basic"],
           },
-          snapshots: "Limited",
-          replication: "No",
+          availability: ["Basic"],
+          management: ["Web UI", "SNMP"],
           protocols: ["SMB", "NFS"],
         },
-        {
-          id: 8,
-          name: "BLR-CZ234409VB",
-          type: "HPE GreenLake For File Storage",
-          deviceScore: 88,
-          score: 90,
-          greenScore: 86,
-          featureScore: 84,
-          capacity: "45TB",
-          readSpeed: 2400,
-          writeSpeed: 2100,
-          iops: 75000,
-          latency: 0.4,
-          throughput: 4500,
-          price: 28000,
-          sustainability: {
-            powerEfficiency: 78,
-            carbonReduction: 68,
-            circularEconomy: 74,
+        snapshots: "Limited",
+        replication: "No",
+        protocols: ["SMB", "NFS"],
+      },
+      {
+        id: 8,
+        name: "BLR-CZ234409VB",
+        type: "HPE GreenLake For File Storage",
+        deviceScore: 88,
+        score: 90,
+        greenScore: 86,
+        featureScore: 84,
+        capacity: "45TB",
+        readSpeed: 2400,
+        writeSpeed: 2100,
+        iops: 75000,
+        latency: 0.4,
+        throughput: 4500,
+        price: 28000,
+        sustainability: {
+          powerEfficiency: 78,
+          carbonReduction: 68,
+          circularEconomy: 74,
+        },
+        features: {
+          dataManagement: {
+            deduplication: "Advanced",
+            compression: "Advanced",
+            tiering: "Automated",
           },
-          features: {
-            dataManagement: {
-              deduplication: "Advanced",
-              compression: "Advanced",
-              tiering: "Automated",
-            },
-            security: {
-              encryption: "AES-256",
-              accessControl: ["RBAC"],
-            },
-            availability: ["Hot-spare", "RAID"],
-            management: ["REST API", "Web UI"],
-            protocols: ["iSCSI", "FC", "NFS"],
+          security: {
+            encryption: "AES-256",
+            accessControl: ["RBAC"],
           },
-          snapshots: "Yes",
-          replication: "Yes",
+          availability: ["Hot-spare", "RAID"],
+          management: ["REST API", "Web UI"],
           protocols: ["iSCSI", "FC", "NFS"],
         },
-        {
-          id: 9,
-          name: "BLR-CZ234410DH",
-          type: "HPE GreenLake For File Storage",
-          deviceScore: 95,
-          score: 97,
-          greenScore: 93,
-          featureScore: 91,
-          capacity: "75TB",
-          readSpeed: 3100,
-          writeSpeed: 2800,
-          iops: 105000,
-          latency: 0.12,
-          throughput: 5900,
-          price: 42000,
-          sustainability: {
-            powerEfficiency: 88,
-            carbonReduction: 73,
-            circularEconomy: 81,
+        snapshots: "Yes",
+        replication: "Yes",
+        protocols: ["iSCSI", "FC", "NFS"],
+      },
+      {
+        id: 9,
+        name: "BLR-CZ234410DH",
+        type: "HPE GreenLake For File Storage",
+        deviceScore: 95,
+        score: 97,
+        greenScore: 93,
+        featureScore: 91,
+        capacity: "75TB",
+        readSpeed: 3100,
+        writeSpeed: 2800,
+        iops: 105000,
+        latency: 0.12,
+        throughput: 5900,
+        price: 42000,
+        sustainability: {
+          powerEfficiency: 88,
+          carbonReduction: 73,
+          circularEconomy: 81,
+        },
+        features: {
+          dataManagement: {
+            deduplication: "Advanced",
+            compression: "Advanced",
+            tiering: "Automated",
           },
-          features: {
-            dataManagement: {
-              deduplication: "Advanced",
-              compression: "Advanced",
-              tiering: "Automated",
-            },
-            security: {
-              encryption: "AES-256",
-              accessControl: ["RBAC", "MFA"],
-            },
-            availability: ["Auto-failover", "Hot-spare", "RAID"],
-            management: ["REST API", "Cloud Integration"],
-            protocols: ["iSCSI", "FC"],
+          security: {
+            encryption: "AES-256",
+            accessControl: ["RBAC", "MFA"],
           },
-          snapshots: "Yes",
-          replication: "Yes",
+          availability: ["Auto-failover", "Hot-spare", "RAID"],
+          management: ["REST API", "Cloud Integration"],
           protocols: ["iSCSI", "FC"],
         },
-        {
-          id: 10,
-          name: "BLR-CZ234411FG",
-          type: "HPE GreenLake For File Storage",
-          deviceScore: 82,
-          score: 84,
-          greenScore: 80,
-          featureScore: 78,
-          capacity: "32TB",
-          readSpeed: 2200,
-          writeSpeed: 1900,
-          iops: 65000,
-          latency: 0.5,
-          throughput: 4100,
-          price: 22000,
-          sustainability: {
-            powerEfficiency: 72,
-            carbonReduction: 62,
-            circularEconomy: 69,
+        snapshots: "Yes",
+        replication: "Yes",
+        protocols: ["iSCSI", "FC"],
+      },
+      {
+        id: 10,
+        name: "BLR-CZ234411FG",
+        type: "HPE GreenLake For File Storage",
+        deviceScore: 82,
+        score: 84,
+        greenScore: 80,
+        featureScore: 78,
+        capacity: "32TB",
+        readSpeed: 2200,
+        writeSpeed: 1900,
+        iops: 65000,
+        latency: 0.5,
+        throughput: 4100,
+        price: 22000,
+        sustainability: {
+          powerEfficiency: 72,
+          carbonReduction: 62,
+          circularEconomy: 69,
+        },
+        features: {
+          dataManagement: {
+            deduplication: "Standard",
+            compression: "Standard",
+            tiering: "Manual",
           },
-          features: {
-            dataManagement: {
-              deduplication: "Standard",
-              compression: "Standard",
-              tiering: "Manual",
-            },
-            security: {
-              encryption: "AES-128",
-              accessControl: ["Basic"],
-            },
-            availability: ["Hot-spare", "RAID"],
-            management: ["Web UI", "CLI"],
-            protocols: ["iSCSI", "FC"],
+          security: {
+            encryption: "AES-128",
+            accessControl: ["Basic"],
           },
-          snapshots: "Yes",
-          replication: "Limited",
+          availability: ["Hot-spare", "RAID"],
+          management: ["Web UI", "CLI"],
           protocols: ["iSCSI", "FC"],
         },
-        {
-          id: 11,
-          name: "BLR-CZ234412JY",
-          type: "HPE GreenLake For File Storage",
-          deviceScore: 86,
-          score: 88,
-          greenScore: 84,
-          featureScore: 82,
-          capacity: "96TB",
-          readSpeed: 2600,
-          writeSpeed: 2300,
-          iops: 55000,
-          latency: 0.6,
-          throughput: 4900,
-          price: 35000,
-          sustainability: {
-            powerEfficiency: 80,
-            carbonReduction: 70,
-            circularEconomy: 76,
+        snapshots: "Yes",
+        replication: "Limited",
+        protocols: ["iSCSI", "FC"],
+      },
+      {
+        id: 11,
+        name: "BLR-CZ234412JY",
+        type: "HPE GreenLake For File Storage",
+        deviceScore: 86,
+        score: 88,
+        greenScore: 84,
+        featureScore: 82,
+        capacity: "96TB",
+        readSpeed: 2600,
+        writeSpeed: 2300,
+        iops: 55000,
+        latency: 0.6,
+        throughput: 4900,
+        price: 35000,
+        sustainability: {
+          powerEfficiency: 80,
+          carbonReduction: 70,
+          circularEconomy: 76,
+        },
+        features: {
+          dataManagement: {
+            deduplication: "Advanced",
+            compression: "Advanced",
+            tiering: "Automated",
           },
-          features: {
-            dataManagement: {
-              deduplication: "Advanced",
-              compression: "Advanced",
-              tiering: "Automated",
-            },
-            security: {
-              encryption: "AES-256",
-              accessControl: ["RBAC"],
-            },
-            availability: ["Redundancy", "Hot-spare"],
-            management: ["REST API", "Web UI"],
-            protocols: ["NFS", "CIFS", "VTL"],
+          security: {
+            encryption: "AES-256",
+            accessControl: ["RBAC"],
           },
-          snapshots: "Yes",
-          replication: "Yes",
+          availability: ["Redundancy", "Hot-spare"],
+          management: ["REST API", "Web UI"],
           protocols: ["NFS", "CIFS", "VTL"],
         },
-        {
-          id: 12,
-          name: "BLR-CZ234413QW",
-          type: "HPE GreenLake For File Storage",
-          deviceScore: 92,
-          score: 94,
-          greenScore: 90,
-          featureScore: 88,
-          capacity: "40TB",
-          readSpeed: 2900,
-          writeSpeed: 2600,
-          iops: 85000,
-          latency: 0.3,
-          throughput: 5500,
-          price: 38000,
-          sustainability: {
-            powerEfficiency: 84,
-            carbonReduction: 74,
-            circularEconomy: 79,
+        snapshots: "Yes",
+        replication: "Yes",
+        protocols: ["NFS", "CIFS", "VTL"],
+      },
+      {
+        id: 12,
+        name: "BLR-CZ234413QW",
+        type: "HPE GreenLake For File Storage",
+        deviceScore: 92,
+        score: 94,
+        greenScore: 90,
+        featureScore: 88,
+        capacity: "40TB",
+        readSpeed: 2900,
+        writeSpeed: 2600,
+        iops: 85000,
+        latency: 0.3,
+        throughput: 5500,
+        price: 38000,
+        sustainability: {
+          powerEfficiency: 84,
+          carbonReduction: 74,
+          circularEconomy: 79,
+        },
+        features: {
+          dataManagement: {
+            deduplication: "Advanced",
+            compression: "Advanced",
+            tiering: "Automated",
           },
-          features: {
-            dataManagement: {
-              deduplication: "Advanced",
-              compression: "Advanced",
-              tiering: "Automated",
-            },
-            security: {
-              encryption: "AES-256",
-              accessControl: ["RBAC"],
-            },
-            availability: ["Auto-failover", "Triple-parity"],
-            management: ["REST API", "Cloud Integration", "AI Analytics"],
-            protocols: ["iSCSI", "FC"],
+          security: {
+            encryption: "AES-256",
+            accessControl: ["RBAC"],
           },
-          snapshots: "Yes",
-          replication: "Yes",
+          availability: ["Auto-failover", "Triple-parity"],
+          management: ["REST API", "Cloud Integration", "AI Analytics"],
           protocols: ["iSCSI", "FC"],
         },
-        {
-          id: 13,
-          name: "BLR-CZ234414ER",
-          type: "HPE GreenLake For File Storage",
-          deviceScore: 79,
-          score: 81,
-          greenScore: 77,
-          featureScore: 75,
-          capacity: "50TB",
-          readSpeed: 2000,
-          writeSpeed: 1700,
-          iops: 50000,
-          latency: 0.7,
-          throughput: 3700,
-          price: 25000,
-          sustainability: {
-            powerEfficiency: 70,
-            carbonReduction: 60,
-            circularEconomy: 67,
+        snapshots: "Yes",
+        replication: "Yes",
+        protocols: ["iSCSI", "FC"],
+      },
+      {
+        id: 13,
+        name: "BLR-CZ234414ER",
+        type: "HPE GreenLake For File Storage",
+        deviceScore: 79,
+        score: 81,
+        greenScore: 77,
+        featureScore: 75,
+        capacity: "50TB",
+        readSpeed: 2000,
+        writeSpeed: 1700,
+        iops: 50000,
+        latency: 0.7,
+        throughput: 3700,
+        price: 25000,
+        sustainability: {
+          powerEfficiency: 70,
+          carbonReduction: 60,
+          circularEconomy: 67,
+        },
+        features: {
+          dataManagement: {
+            deduplication: "Standard",
+            compression: "Standard",
+            tiering: "Manual",
           },
-          features: {
-            dataManagement: {
-              deduplication: "Standard",
-              compression: "Standard",
-              tiering: "Manual",
-            },
-            security: {
-              encryption: "AES-128",
-              accessControl: ["Basic"],
-            },
-            availability: ["Network RAID", "Hot-spare"],
-            management: ["Web UI", "CLI"],
-            protocols: ["iSCSI"],
+          security: {
+            encryption: "AES-128",
+            accessControl: ["Basic"],
           },
-          snapshots: "Yes",
-          replication: "Yes",
+          availability: ["Network RAID", "Hot-spare"],
+          management: ["Web UI", "CLI"],
           protocols: ["iSCSI"],
         },
-        {
-          id: 14,
-          name: "BLR-CZ234415TU",
-          type: "HPE GreenLake For File Storage",
-          deviceScore: 97,
-          score: 99,
-          greenScore: 95,
-          featureScore: 93,
-          capacity: "120TB",
-          readSpeed: 3400,
-          writeSpeed: 3100,
-          iops: 115000,
-          latency: 0.08,
-          throughput: 6500,
-          price: 55000,
-          sustainability: {
-            powerEfficiency: 90,
-            carbonReduction: 76,
-            circularEconomy: 83,
+        snapshots: "Yes",
+        replication: "Yes",
+        protocols: ["iSCSI"],
+      },
+      {
+        id: 14,
+        name: "BLR-CZ234415TU",
+        type: "HPE GreenLake For File Storage",
+        deviceScore: 97,
+        score: 99,
+        greenScore: 95,
+        featureScore: 93,
+        capacity: "120TB",
+        readSpeed: 3400,
+        writeSpeed: 3100,
+        iops: 115000,
+        latency: 0.08,
+        throughput: 6500,
+        price: 55000,
+        sustainability: {
+          powerEfficiency: 90,
+          carbonReduction: 76,
+          circularEconomy: 83,
+        },
+        features: {
+          dataManagement: {
+            deduplication: "Advanced",
+            compression: "Advanced",
+            tiering: "Automated",
           },
-          features: {
-            dataManagement: {
-              deduplication: "Advanced",
-              compression: "Advanced",
-              tiering: "Automated",
-            },
-            security: {
-              encryption: "AES-256",
-              accessControl: ["RBAC", "MFA", "LDAP"],
-            },
-            availability: ["Auto-failover", "Hot-spare", "RAID", "Multi-site"],
-            management: [
-              "REST API",
-              "Cloud Integration",
-              "AI Analytics",
-              "SSMC",
-            ],
-            protocols: ["FC", "iSCSI", "FCoE"],
+          security: {
+            encryption: "AES-256",
+            accessControl: ["RBAC", "MFA", "LDAP"],
           },
-          snapshots: "Yes",
-          replication: "Yes",
+          availability: ["Auto-failover", "Hot-spare", "RAID", "Multi-site"],
+          management: ["REST API", "Cloud Integration", "AI Analytics", "SSMC"],
           protocols: ["FC", "iSCSI", "FCoE"],
         },
-        {
-          id: 15,
-          name: "BLR-CZ234416IO",
-          type: "HPE GreenLake For File Storage",
-          deviceScore: 91,
-          score: 93,
-          greenScore: 89,
-          featureScore: 87,
-          capacity: "65TB",
-          readSpeed: 2700,
-          writeSpeed: 2400,
-          iops: 80000,
-          latency: 0.25,
-          throughput: 5100,
-          price: 45000,
-          sustainability: {
-            powerEfficiency: 82,
-            carbonReduction: 72,
-            circularEconomy: 78,
+        snapshots: "Yes",
+        replication: "Yes",
+        protocols: ["FC", "iSCSI", "FCoE"],
+      },
+      {
+        id: 15,
+        name: "BLR-CZ234416IO",
+        type: "HPE GreenLake For File Storage",
+        deviceScore: 91,
+        score: 93,
+        greenScore: 89,
+        featureScore: 87,
+        capacity: "65TB",
+        readSpeed: 2700,
+        writeSpeed: 2400,
+        iops: 80000,
+        latency: 0.25,
+        throughput: 5100,
+        price: 45000,
+        sustainability: {
+          powerEfficiency: 82,
+          carbonReduction: 72,
+          circularEconomy: 78,
+        },
+        features: {
+          dataManagement: {
+            deduplication: "Advanced",
+            compression: "Advanced",
+            tiering: "Automated",
           },
-          features: {
-            dataManagement: {
-              deduplication: "Advanced",
-              compression: "Advanced",
-              tiering: "Automated",
-            },
-            security: {
-              encryption: "AES-256",
-              accessControl: ["RBAC", "MFA"],
-            },
-            availability: ["HA", "DRS", "Hot-spare"],
-            management: [
-              "vCenter Integration",
-              "REST API",
-              "Cloud Integration",
-            ],
-            protocols: ["NFS", "iSCSI", "vSAN"],
+          security: {
+            encryption: "AES-256",
+            accessControl: ["RBAC", "MFA"],
           },
-          snapshots: "Yes",
-          replication: "Yes",
+          availability: ["HA", "DRS", "Hot-spare"],
+          management: ["vCenter Integration", "REST API", "Cloud Integration"],
           protocols: ["NFS", "iSCSI", "vSAN"],
         },
-      ],
+        snapshots: "Yes",
+        replication: "Yes",
+        protocols: ["NFS", "iSCSI", "vSAN"],
+      },
+    ];
+
+    // Transform devices to add dataReduction field with boolean structure
+    const enhancedDevices = devices.map((device) => ({
+      ...device,
+      dataReduction:
+        device.features?.dataManagement?.deduplication !== "Not Available" &&
+        device.features?.dataManagement?.compression !== "Not Available" &&
+        device.features?.dataManagement?.deduplication !== "Basic" &&
+        device.features?.dataManagement?.compression !== "Basic",
+    }));
+
+    return {
+      devices: enhancedDevices,
     };
   }
 
   // Fetch all storage devices with optional sorting
-  async getStorageDevices(sortBy = 'deviceScore', sortOrder = 'asc') {
+  async getStorageDevices(sortBy = "deviceScore", sortOrder = "asc") {
     if (this.isMockMode) {
       console.log("📊 Using mock data for storage devices");
       const devices = this.getMockData().devices;
@@ -660,7 +663,7 @@ class StorageApiService {
   }
 
   // Fetch sustainability metrics with optional sorting
-  async getSustainabilityMetrics(sortBy = 'greenScore', sortOrder = 'asc') {
+  async getSustainabilityMetrics(sortBy = "greenScore", sortOrder = "asc") {
     if (this.isMockMode) {
       console.log("🌱 Using mock data for sustainability metrics");
       const devices = this.getMockData().devices;
@@ -681,7 +684,7 @@ class StorageApiService {
   }
 
   // Fetch performance metrics with optional sorting
-  async getPerformanceMetrics(sortBy = 'score', sortOrder = 'asc') {
+  async getPerformanceMetrics(sortBy = "score", sortOrder = "asc") {
     if (this.isMockMode) {
       console.log("⚡ Using mock data for performance metrics");
       const devices = this.getMockData().devices;
@@ -702,7 +705,7 @@ class StorageApiService {
   }
 
   // Fetch feature comparison data with optional sorting
-  async getFeatureComparison(sortBy = 'featureScore', sortOrder = 'asc') {
+  async getFeatureComparison(sortBy = "featureScore", sortOrder = "asc") {
     if (this.isMockMode) {
       console.log("🔧 Using mock data for feature comparison");
       const devices = this.getMockData().devices;
@@ -725,24 +728,24 @@ class StorageApiService {
   // Local sorting function for mock data
   sortDevicesLocally(devices, sortBy, sortOrder) {
     if (!devices || devices.length === 0) return [];
-    
+
     return devices.sort((a, b) => {
       let valueA = a[sortBy];
       let valueB = b[sortBy];
 
       // Handle different data types
-      if (typeof valueA === 'string' && typeof valueB === 'string') {
+      if (typeof valueA === "string" && typeof valueB === "string") {
         valueA = valueA.toLowerCase();
         valueB = valueB.toLowerCase();
-        
-        if (sortOrder === 'desc') {
+
+        if (sortOrder === "desc") {
           return valueB.localeCompare(valueA);
         } else {
           return valueA.localeCompare(valueB);
         }
       } else {
         // Numeric comparison
-        if (sortOrder === 'desc') {
+        if (sortOrder === "desc") {
           return valueB - valueA;
         } else {
           return valueA - valueB;

@@ -91,8 +91,8 @@ const FeatureTable = ({ devices, onViewDetails, averageData, sortBy, sortOrder, 
                   </div>
                 </td>
                 <td>
-                  <span className="data-reduction-badge">
-                    {device.dataReduction}
+                  <span className={`feature-badge ${device.dataReduction ? 'available' : 'unavailable'}`}>
+                    {device.dataReduction ? 'Yes' : 'No'}
                   </span>
                 </td>
                 <td>
@@ -148,18 +148,9 @@ const FeatureTable = ({ devices, onViewDetails, averageData, sortBy, sortOrder, 
             </span>
           </div>
           <div className="stat">
-            <span className="stat-label">Best Data Reduction:</span>
+            <span className="stat-label">Data Reduction Support:</span>
             <span className="stat-value">
-              {devices.filter(device => device.dataReduction && device.dataReduction.includes(':')).length > 0 
-                ? devices
-                    .filter(device => device.dataReduction && device.dataReduction.includes(':'))
-                    .reduce((best, device) => {
-                      const currentRatio = parseInt(device.dataReduction.split(':')[0]);
-                      const bestRatio = parseInt(best.dataReduction.split(':')[0]);
-                      return currentRatio > bestRatio ? device : best;
-                    }).dataReduction
-                : 'N/A'
-              }
+              {devices.filter(device => device.dataReduction === true).length} of {devices.length} devices
             </span>
           </div>
           <div className="stat">

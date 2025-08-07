@@ -537,3 +537,53 @@
   border-color: #01A982;
   color: #ffffff;
 }
+
+/* Throughput Display Styles */
+.throughput-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.throughput-combined {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.read-speed {
+  color: #4caf50;
+  font-weight: 500;
+}
+
+.write-speed {
+  color: #2196f3;
+  font-weight: 500;
+}
+
+.throughput-average {
+  font-weight: 600;
+  color: #01A982;
+  font-size: 11px;
+  padding: 2px 6px;
+  background: rgba(1, 169, 130, 0.1);
+  border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .throughput-display {
+    font-size: 10px;
+  }
+  
+  .throughput-combined {
+    flex-direction: column;
+    gap: 2px;
+  }
+  
+  .throughput-average {
+    font-size: 10px;
+  }
+}

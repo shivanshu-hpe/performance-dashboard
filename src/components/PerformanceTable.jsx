@@ -3,8 +3,20 @@ import './ComparisonTable.css';
 import PerformanceFeedbackModal from './PerformanceFeedbackModal';
 import Pagination from './Pagination';
 import usePagination from '../hooks/usePagination';
-import { getPerformanceLevel, formatNumber } from '../utils/scoreUtils';
+import { getPerformanceLevel } from '../utils/scoreUtils';
 import SortableHeader from './SortableHeader';
+
+// Local formatNumber function to avoid import issues
+const formatNumber = (num) => {
+  if (!num || isNaN(num)) return '0';
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1) + "M";
+  }
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1) + "K";
+  }
+  return num.toString();
+};
 
 const PerformanceTable = ({ devices, onViewDetails, averageData, sortBy, sortOrder, onSort }) => {
   const [selectedDevice, setSelectedDevice] = useState(null);
@@ -56,11 +68,10 @@ const PerformanceTable = ({ devices, onViewDetails, averageData, sortBy, sortOrd
                 onSort={onSort} 
               />
               <th>Capacity</th>
-              <th>Read Speed (MB/s)</th>
-              <th>Write Speed (MB/s)</th>
-              <th>IOPS</th>
               <th>Read Latency (ms)</th>
               <th>Write Latency (ms)</th>
+              <th>IOPS</th>
+              <th>Throughput (MB/s)</th>
               <th>Feedback</th>
             </tr>
           </thead>
@@ -111,18 +122,27 @@ const PerformanceTable = ({ devices, onViewDetails, averageData, sortBy, sortOrd
                     )}
                   </div>
                 </td>
-                <td className="performance-metric">{formatNumber(device.readSpeed)}</td>
-                <td className="performance-metric">{formatNumber(device.writeSpeed)}</td>
-                <td className="performance-metric">{formatNumber(device.iops)}</td>
                 <td className="latency-metric">
-                  <span className={device.readLatency < 0.1 ? 'low-latency' : device.readLatency < 0.2 ? 'medium-latency' : 'high-latency'}>
+                  <span className={device.readLatency < 1 ? 'low-latency' : device.readLatency < 3 ? 'medium-latency' : 'high-latency'}>
                     {device.readLatency || device.latency}
                   </span>
                 </td>
                 <td className="latency-metric">
-                  <span className={device.writeLatency < 0.1 ? 'low-latency' : device.writeLatency < 0.2 ? 'medium-latency' : 'high-latency'}>
+                  <span className={(device.writeLatency || (device.latency * 1.1)) < 2 ? 'low-latency' : (device.writeLatency || (device.latency * 1.1)) < 5 ? 'medium-latency' : 'high-latency'}>
                     {device.writeLatency || (device.latency * 1.1).toFixed(3)}
                   </span>
+                </td>
+                <td className="performance-metric">{formatNumber(device.iops)}</td>
+                <td className="performance-metric">
+                  <div className="throughput-display">
+                    <div className="throughput-combined">
+                      <span className="read-speed">R: {formatNumber(device.readSpeed || 0)}</span>
+                      <span className="write-speed">W: {formatNumber(device.writeSpeed || 0)}</span>
+                    </div>
+                    <div className="throughput-average">
+                      Avg: {formatNumber(Math.round(((device.readSpeed || 0) + (device.writeSpeed || 0)) / 2))}
+                    </div>
+                  </div>
                 </td>
                 <td>
                   <button 
@@ -155,11 +175,13 @@ const PerformanceTable = ({ devices, onViewDetails, averageData, sortBy, sortOrd
             </span>
           </div>
           <div className="stat">
-            <span className="stat-label">Fastest Read Speed:</span>
+            <span className="stat-label">Fastest Throughput:</span>
             <span className="stat-value">
-              {formatNumber(devices.reduce((best, device) => 
-                device.readSpeed > best.readSpeed ? device : best
-              ).readSpeed)} MB/s
+              {formatNumber(devices.reduce((best, device) => {
+                const bestAvg = ((best.readSpeed || 0) + (best.writeSpeed || 0)) / 2;
+                const deviceAvg = ((device.readSpeed || 0) + (device.writeSpeed || 0)) / 2;
+                return deviceAvg > bestAvg ? device : best;
+              }, devices[0] || {}).readSpeed || 0)} MB/s
             </span>
           </div>
           <div className="stat">
