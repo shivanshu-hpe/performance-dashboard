@@ -3,8 +3,9 @@ import './ComparisonTable.css';
 import SustainabilityFeedbackModal from './SustainabilityFeedbackModal';
 import Pagination from './Pagination';
 import usePagination from '../hooks/usePagination';
+import { getPerformanceLevel } from '../utils/scoreUtils';
 
-const SustainabilityTable = ({ devices, onSort, sortConfig, onViewDetails, averageData }) => {
+const SustainabilityTable = ({ devices, onViewDetails, averageData }) => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -15,7 +16,7 @@ const SustainabilityTable = ({ devices, onSort, sortConfig, onViewDetails, avera
     paginatedData,
     handlePageChange,
     resetPagination
-  } = usePagination(devices, 10);
+  } = usePagination(devices, 5);
 
   // Reset pagination when devices change
   useEffect(() => {
@@ -30,31 +31,6 @@ const SustainabilityTable = ({ devices, onSort, sortConfig, onViewDetails, avera
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedDevice(null);
-  };
-  const getPerformanceLevel = (score) => {
-    if (score >= 90) return 'excellent';
-    if (score >= 75) return 'good';
-    if (score >= 60) return 'average';
-    return 'poor';
-  };
-
-  const getComparisonLevel = (deviceValue, averageValue, isInverted = false) => {
-    const threshold = averageValue * 0.05; // 5% threshold for "equal"
-    
-    if (isInverted) {
-      if (deviceValue <= averageValue - threshold) return 'above-average';
-      if (deviceValue >= averageValue + threshold) return 'below-average';
-      return 'average';
-    } else {
-      if (deviceValue >= averageValue + threshold) return 'above-average';
-      if (deviceValue <= averageValue - threshold) return 'below-average';
-      return 'average';
-    }
-  };
-
-  const getSortIcon = (columnKey) => {
-    if (sortConfig?.key !== columnKey) return '▲▼';
-    return sortConfig.direction === 'asc' ? '▲' : '▼';
   };
 
   return (
@@ -71,24 +47,9 @@ const SustainabilityTable = ({ devices, onSort, sortConfig, onViewDetails, avera
           <thead>
             <tr>
               <th>Product Name</th>
-              <th 
-                className={`sortable ${sortConfig?.key === 'greenScore' ? 'active' : ''}`}
-                onClick={() => onSort('greenScore')}
-              >
-                Green Score {getSortIcon('greenScore')}
-              </th>
-              <th 
-                className={`sortable ${sortConfig?.key === 'sustainability.powerEfficiency' ? 'active' : ''}`}
-                onClick={() => onSort('sustainability.powerEfficiency')}
-              >
-                Power Efficiency {getSortIcon('sustainability.powerEfficiency')}
-              </th>
-              <th 
-                className={`sortable ${sortConfig?.key === 'sustainability.carbonReduction' ? 'active' : ''}`}
-                onClick={() => onSort('sustainability.carbonReduction')}
-              >
-                Carbon Reduction % {getSortIcon('sustainability.carbonReduction')}
-              </th>
+              <th>Green Score</th>
+              <th>Power Efficiency</th>
+              <th>Carbon Reduction %</th>
               <th>Feedback</th>
             </tr>
           </thead>
@@ -105,12 +66,12 @@ const SustainabilityTable = ({ devices, onSort, sortConfig, onViewDetails, avera
                 </td>
                 <td>
                   <div className="score-container">
-                    <span className={`score ${getComparisonLevel(device.greenScore, averageData?.greenScore || 78)}`}>
+                    <span className={`score ${getPerformanceLevel(device.greenScore)}`}>
                       {device.greenScore}
                     </span>
                     <div className="score-bar">
                       <div 
-                        className={`score-fill sustainability ${getComparisonLevel(device.greenScore, averageData?.greenScore || 78)}`}
+                        className={`score-fill sustainability ${getPerformanceLevel(device.greenScore)}`}
                         style={{ width: `${device.greenScore}%` }}
                       ></div>
                     </div>
@@ -118,12 +79,12 @@ const SustainabilityTable = ({ devices, onSort, sortConfig, onViewDetails, avera
                 </td>
                 <td>
                   <div className="score-container">
-                    <span className={`score ${getComparisonLevel(device.sustainability.powerEfficiency, averageData?.sustainability?.powerEfficiency || 75)}`}>
+                    <span className={`score ${getPerformanceLevel(device.sustainability.powerEfficiency)}`}>
                       {device.sustainability.powerEfficiency}
                     </span>
                     <div className="score-bar">
                       <div 
-                        className={`score-fill sustainability ${getComparisonLevel(device.sustainability.powerEfficiency, averageData?.sustainability?.powerEfficiency || 75)}`}
+                        className={`score-fill sustainability ${getPerformanceLevel(device.sustainability.powerEfficiency)}`}
                         style={{ width: `${device.sustainability.powerEfficiency}%` }}
                       ></div>
                     </div>
@@ -149,7 +110,7 @@ const SustainabilityTable = ({ devices, onSort, sortConfig, onViewDetails, avera
         <Pagination
           currentPage={currentPage}
           totalItems={totalItems}
-          itemsPerPage={10}
+          itemsPerPage={5}
           onPageChange={handlePageChange}
         />
       </div>

@@ -1,15 +1,22 @@
 // API service for fetching storage device data
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "https://api.hpe-storage.com/v1";
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
 class StorageApiService {
   constructor() {
-    this.isMockMode = import.meta.env.VITE_MOCK_MODE === "true" || true;
+    console.log("🔍 Environment variables:", {
+      VITE_MOCK_MODE: import.meta.env.VITE_MOCK_MODE,
+      VITE_API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
+      NODE_ENV: import.meta.env.NODE_ENV,
+    });
+
+    this.isMockMode = import.meta.env.VITE_MOCK_MODE === "true" || false;
     console.log(
       `🔧 StorageApiService initialized in ${
         this.isMockMode ? "mock" : "API"
       } mode`
     );
+    console.log(`🌐 API Base URL: ${API_BASE_URL}`);
   }
 
   // Toggle between mock and API mode (for testing)
@@ -21,10 +28,13 @@ class StorageApiService {
   // Generic API fetch wrapper
   async fetchFromApi(endpoint, options = {}) {
     try {
+      console.log(`📡 Making API request to: ${API_BASE_URL}${endpoint}`);
+
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+          // Remove authorization for local development unless your server requires it
+          // Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
           ...options.headers,
         },
         ...options,
@@ -34,9 +44,11 @@ class StorageApiService {
         throw new Error(`API Error: ${response.status} ${response.statusText}`);
       }
 
-      return await response.json();
+      const data = await response.json();
+      console.log(`✅ API response received for ${endpoint}:`, data);
+      return data;
     } catch (error) {
-      console.error(`Failed to fetch from ${endpoint}:`, error);
+      console.error(`❌ Failed to fetch from ${endpoint}:`, error);
       throw error;
     }
   }

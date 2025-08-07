@@ -3,8 +3,9 @@ import './ComparisonTable.css';
 import PerformanceFeedbackModal from './PerformanceFeedbackModal';
 import Pagination from './Pagination';
 import usePagination from '../hooks/usePagination';
+import { getPerformanceLevel, formatNumber } from '../utils/scoreUtils';
 
-const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageData }) => {
+const PerformanceTable = ({ devices, onViewDetails, averageData }) => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -15,7 +16,7 @@ const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageD
     paginatedData,
     handlePageChange,
     resetPagination
-  } = usePagination(devices, 10);
+  } = usePagination(devices, 5);
 
   // Reset pagination when devices change
   useEffect(() => {
@@ -30,41 +31,6 @@ const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageD
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedDevice(null);
-  };
-  const getPerformanceLevel = (score) => {
-    if (score >= 90) return 'excellent';
-    if (score >= 75) return 'good';
-    if (score >= 60) return 'average';
-    return 'poor';
-  };
-
-  const getComparisonLevel = (deviceValue, averageValue, isInverted = false) => {
-    const threshold = averageValue * 0.05; // 5% threshold for "equal"
-    
-    if (isInverted) {
-      if (deviceValue <= averageValue - threshold) return 'above-average';
-      if (deviceValue >= averageValue + threshold) return 'below-average';
-      return 'average';
-    } else {
-      if (deviceValue >= averageValue + threshold) return 'above-average';
-      if (deviceValue <= averageValue - threshold) return 'below-average';
-      return 'average';
-    }
-  };
-
-  const formatNumber = (num) => {
-    if (num >= 1000000) {
-      return (num / 1000000).toFixed(1) + 'M';
-    }
-    if (num >= 1000) {
-      return (num / 1000).toFixed(1) + 'K';
-    }
-    return num.toString();
-  };
-
-  const getSortIcon = (columnKey) => {
-    if (sortConfig?.key !== columnKey) return '▲▼';
-    return sortConfig.direction === 'asc' ? '▲' : '▼';
   };
 
   return (
@@ -81,42 +47,12 @@ const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageD
           <thead>
             <tr>
               <th>Product Name</th>
-              <th 
-                className={`sortable ${sortConfig?.key === 'score' ? 'active' : ''}`}
-                onClick={() => onSort('score')}
-              >
-                Performance Score {getSortIcon('score')}
-              </th>
-              <th 
-                className={`sortable ${sortConfig?.key === 'capacity' ? 'active' : ''}`}
-                onClick={() => onSort('capacity')}
-              >
-                Capacity {getSortIcon('capacity')}
-              </th>
-              <th 
-                className={`sortable ${sortConfig?.key === 'readSpeed' ? 'active' : ''}`}
-                onClick={() => onSort('readSpeed')}
-              >
-                Read Speed (MB/s) {getSortIcon('readSpeed')}
-              </th>
-              <th 
-                className={`sortable ${sortConfig?.key === 'writeSpeed' ? 'active' : ''}`}
-                onClick={() => onSort('writeSpeed')}
-              >
-                Write Speed (MB/s) {getSortIcon('writeSpeed')}
-              </th>
-              <th 
-                className={`sortable ${sortConfig?.key === 'iops' ? 'active' : ''}`}
-                onClick={() => onSort('iops')}
-              >
-                IOPS {getSortIcon('iops')}
-              </th>
-              <th 
-                className={`sortable ${sortConfig?.key === 'latency' ? 'active' : ''}`}
-                onClick={() => onSort('latency')}
-              >
-                Latency (ms) {getSortIcon('latency')}
-              </th>
+              <th>Performance Score</th>
+              <th>Capacity</th>
+              <th>Read Speed (MB/s)</th>
+              <th>Write Speed (MB/s)</th>
+              <th>IOPS</th>
+              <th>Latency (ms)</th>
               <th>Feedback</th>
             </tr>
           </thead>
@@ -133,12 +69,12 @@ const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageD
                 </td>
                 <td>
                   <div className="score-container">
-                    <span className={`score ${getComparisonLevel(device.score, averageData?.score || 82)}`}>
+                    <span className={`score ${getPerformanceLevel(device.score)}`}>
                       {device.score}
                     </span>
                     <div className="score-bar">
                       <div 
-                        className={`score-fill performance ${getComparisonLevel(device.score, averageData?.score || 82)}`}
+                        className={`score-fill performance ${getPerformanceLevel(device.score)}`}
                         style={{ width: `${device.score}%` }}
                       ></div>
                     </div>
@@ -170,7 +106,7 @@ const PerformanceTable = ({ devices, onSort, sortConfig, onViewDetails, averageD
         <Pagination
           currentPage={currentPage}
           totalItems={totalItems}
-          itemsPerPage={10}
+          itemsPerPage={5}
           onPageChange={handlePageChange}
         />
       </div>

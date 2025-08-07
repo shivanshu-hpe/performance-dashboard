@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
 
-export const usePagination = (data, itemsPerPage = 10) => {
+export const usePagination = (data, itemsPerPage = 5) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   // Reset to page 1 when data changes

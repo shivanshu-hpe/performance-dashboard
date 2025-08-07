@@ -3,8 +3,9 @@ import './ComparisonTable.css';
 import FeatureFeedbackModal from './FeatureFeedbackModal';
 import Pagination from './Pagination';
 import usePagination from '../hooks/usePagination';
+import { getPerformanceLevel } from '../utils/scoreUtils';
 
-const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData }) => {
+const FeatureTable = ({ devices, onViewDetails, averageData }) => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -15,7 +16,7 @@ const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData 
     paginatedData,
     handlePageChange,
     resetPagination
-  } = usePagination(devices, 10);
+  } = usePagination(devices, 5);
 
   // Reset pagination when devices change
   useEffect(() => {
@@ -30,31 +31,6 @@ const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedDevice(null);
-  };
-  const getPerformanceLevel = (score) => {
-    if (score >= 90) return 'excellent';
-    if (score >= 75) return 'good';
-    if (score >= 60) return 'average';
-    return 'poor';
-  };
-
-  const getComparisonLevel = (deviceValue, averageValue, isInverted = false) => {
-    const threshold = averageValue * 0.05; // 5% threshold for "equal"
-    
-    if (isInverted) {
-      if (deviceValue <= averageValue - threshold) return 'above-average';
-      if (deviceValue >= averageValue + threshold) return 'below-average';
-      return 'average';
-    } else {
-      if (deviceValue >= averageValue + threshold) return 'above-average';
-      if (deviceValue <= averageValue - threshold) return 'below-average';
-      return 'average';
-    }
-  };
-
-  const getSortIcon = (columnKey) => {
-    if (sortConfig?.key !== columnKey) return '▲▼';
-    return sortConfig.direction === 'asc' ? '▲' : '▼';
   };
 
   const formatProtocols = (protocols) => {
@@ -75,18 +51,8 @@ const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData 
           <thead>
             <tr>
               <th>Product Name</th>
-              <th 
-                className={`sortable ${sortConfig?.key === 'featureScore' ? 'active' : ''}`}
-                onClick={() => onSort('featureScore')}
-              >
-                Feature Score {getSortIcon('featureScore')}
-              </th>
-              <th 
-                className={`sortable ${sortConfig?.key === 'dataReduction' ? 'active' : ''}`}
-                onClick={() => onSort('dataReduction')}
-              >
-                Data Reduction {getSortIcon('dataReduction')}
-              </th>
+              <th>Feature Score</th>
+              <th>Data Reduction</th>
               <th>Snapshots</th>
               <th>Replication</th>
               <th>Protocols</th>
@@ -106,12 +72,12 @@ const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData 
                 </td>
                 <td>
                   <div className="score-container">
-                    <span className={`score ${getComparisonLevel(device.featureScore, averageData?.featureScore || 80)}`}>
+                    <span className={`score ${getPerformanceLevel(device.featureScore)}`}>
                       {device.featureScore}
                     </span>
                     <div className="score-bar">
                       <div 
-                        className={`score-fill feature ${getComparisonLevel(device.featureScore, averageData?.featureScore || 80)}`}
+                        className={`score-fill feature ${getPerformanceLevel(device.featureScore)}`}
                         style={{ width: `${device.featureScore}%` }}
                       ></div>
                     </div>
@@ -161,7 +127,7 @@ const FeatureTable = ({ devices, onSort, sortConfig, onViewDetails, averageData 
         <Pagination
           currentPage={currentPage}
           totalItems={totalItems}
-          itemsPerPage={10}
+          itemsPerPage={5}
           onPageChange={handlePageChange}
         />
       </div>

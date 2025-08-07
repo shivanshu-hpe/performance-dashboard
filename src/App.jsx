@@ -75,9 +75,6 @@ function Dashboard() {
   // Loading and error states
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
-  // UI state
-  const [sortConfig, setSortConfig] = useState({ key: 'deviceScore', direction: 'desc' });
 
   // Load all data from API or mock
   const loadAllData = async () => {
@@ -124,15 +121,6 @@ function Dashboard() {
   const handleSystemSelect = (system) => {
     console.log('📱 Navigating to system:', system.name);
     navigate(`/system/${system.id}`);
-  };
-
-  // Sort handler
-  const handleSort = (sortKey) => {
-    console.log('🔄 Sorting by:', sortKey);
-    setSortConfig(prevConfig => ({
-      key: sortKey,
-      direction: prevConfig.key === sortKey && prevConfig.direction === 'desc' ? 'asc' : 'desc'
-    }));
   };
 
   // Calculate totals for the averages
@@ -187,22 +175,6 @@ function Dashboard() {
 
   // Calculate averages for display
   const averageData = calculateAverages(enrichedData);
-
-  // Sort data based on current sort configuration
-  const sortedData = [...enrichedData].sort((a, b) => {
-    if (!sortConfig.key) return 0;
-    
-    const aValue = a[sortConfig.key];
-    const bValue = b[sortConfig.key];
-    
-    if (aValue < bValue) {
-      return sortConfig.direction === 'asc' ? -1 : 1;
-    }
-    if (aValue > bValue) {
-      return sortConfig.direction === 'asc' ? 1 : -1;
-    }
-    return 0;
-  });
 
   // View details handler
   const handleViewDetails = (device) => {
@@ -279,9 +251,7 @@ function Dashboard() {
           <Card margin={{ vertical: 'medium' }} elevation="small">
             <CardBody pad="medium">
               <StorageDeviceTable 
-                devices={sortedData}
-                onSort={handleSort}
-                sortConfig={sortConfig}
+                devices={enrichedData}
                 onViewDetails={handleViewDetails}
                 averageData={averageData}
               />
@@ -291,9 +261,7 @@ function Dashboard() {
           <Card margin={{ vertical: 'medium' }} elevation="small">
             <CardBody pad="medium">
               <SustainabilityTable 
-                devices={sustainabilityData.length > 0 ? sustainabilityData : sortedData}
-                onSort={handleSort}
-                sortConfig={sortConfig}
+                devices={sustainabilityData.length > 0 ? sustainabilityData : enrichedData}
                 onViewDetails={handleViewDetails}
                 averageData={averageData}
               />
@@ -303,9 +271,7 @@ function Dashboard() {
           <Card margin={{ vertical: 'medium' }} elevation="small">
             <CardBody pad="medium">
               <PerformanceTable 
-                devices={performanceData.length > 0 ? performanceData : sortedData}
-                onSort={handleSort}
-                sortConfig={sortConfig}
+                devices={performanceData.length > 0 ? performanceData : enrichedData}
                 onViewDetails={handleViewDetails}
                 averageData={averageData}
               />
@@ -315,9 +281,7 @@ function Dashboard() {
           <Card margin={{ vertical: 'medium' }} elevation="small">
             <CardBody pad="medium">
               <FeatureTable 
-                devices={featureData.length > 0 ? featureData : sortedData}
-                onSort={handleSort}
-                sortConfig={sortConfig}
+                devices={featureData.length > 0 ? featureData : enrichedData}
                 onViewDetails={handleViewDetails}
                 averageData={averageData}
               />

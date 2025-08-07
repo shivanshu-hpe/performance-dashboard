@@ -9,7 +9,13 @@ This document outlines all the API endpoints and required JSON data structures f
 
 ## Base Configuration
 
-### API Base URL
+### API Base URL (Local Development)
+
+```
+http://localhost:3000/v1
+```
+
+### API Base URL (Production)
 
 ```
 https://api.hpe-storage.com/v1
@@ -17,7 +23,7 @@ https://api.hpe-storage.com/v1
 
 ### Authentication
 
-All API endpoints require Bearer token authentication:
+Authentication is optional for local development. For production, all API endpoints require Bearer token authentication:
 
 ```
 Authorization: Bearer <your_api_token>
@@ -25,6 +31,17 @@ Content-Type: application/json
 ```
 
 ### Environment Variables
+
+For local development with your API server:
+
+```env
+VITE_API_BASE_URL=http://localhost:3000/v1
+VITE_MOCK_MODE=false
+VITE_DEBUG=true
+# VITE_API_TOKEN=your_token_here (if auth required)
+```
+
+For production:
 
 ```env
 VITE_API_BASE_URL=https://api.hpe-storage.com/v1

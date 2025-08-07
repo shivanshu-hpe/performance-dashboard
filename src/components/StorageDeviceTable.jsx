@@ -4,8 +4,9 @@ import FeedbackModal from './FeedbackModal';
 import Pagination from './Pagination';
 import usePagination from '../hooks/usePagination';
 import { StatusGood } from 'grommet-icons';
+import { getPerformanceLevel, formatNumber } from '../utils/scoreUtils';
 
-const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averageData }) => {
+const StorageDeviceTable = ({ devices, onViewDetails, averageData }) => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   
@@ -16,7 +17,7 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
     paginatedData,
     handlePageChange,
     resetPagination
-  } = usePagination(devices, 10);
+  } = usePagination(devices, 5);
 
   // Reset pagination when devices array length changes (indicating new data)
   useEffect(() => {
@@ -31,43 +32,6 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedDevice(null);
-  };
-  const getPerformanceLevel = (score) => {
-    if (score >= 90) return 'excellent';
-    if (score >= 75) return 'good';
-    if (score >= 60) return 'average';
-    return 'poor';
-  };
-
-  const getComparisonLevel = (deviceValue, averageValue, isInverted = false) => {
-    const threshold = averageValue * 0.05; // 5% threshold for "equal"
-    
-    if (isInverted) {
-      // For metrics like latency where lower is better
-      if (deviceValue <= averageValue - threshold) return 'above-average';
-      if (deviceValue >= averageValue + threshold) return 'below-average';
-      return 'average';
-    } else {
-      // For metrics where higher is better
-      if (deviceValue >= averageValue + threshold) return 'above-average';
-      if (deviceValue <= averageValue - threshold) return 'below-average';
-      return 'average';
-    }
-  };
-
-  const formatNumber = (num) => {
-    if (num >= 1000000) {
-      return (num / 1000000).toFixed(1) + 'M';
-    }
-    if (num >= 1000) {
-      return (num / 1000).toFixed(1) + 'K';
-    }
-    return num.toString();
-  };
-
-  const getSortIcon = (columnKey) => {
-    if (sortConfig?.key !== columnKey) return '▲▼';
-    return sortConfig.direction === 'asc' ? '▲' : '▼';
   };
 
   return (
@@ -85,30 +49,10 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
             <tr>
               <th>Product Name</th>
               <th>Storage Tier</th>
-              <th 
-                className={`sortable ${sortConfig?.key === 'deviceScore' ? 'active' : ''}`}
-                onClick={() => onSort('deviceScore')}
-              >
-                Device Score {getSortIcon('deviceScore')}
-              </th>
-              <th 
-                className={`sortable ${sortConfig?.key === 'score' ? 'active' : ''}`}
-                onClick={() => onSort('score')}
-              >
-                Performance Score {getSortIcon('score')}
-              </th>
-              <th 
-                className={`sortable ${sortConfig?.key === 'greenScore' ? 'active' : ''}`}
-                onClick={() => onSort('greenScore')}
-              >
-                Green Score {getSortIcon('greenScore')}
-              </th>
-              <th 
-                className={`sortable ${sortConfig?.key === 'featureScore' ? 'active' : ''}`}
-                onClick={() => onSort('featureScore')}
-              >
-                Feature Score {getSortIcon('featureScore')}
-              </th>
+              <th>Device Score</th>
+              <th>Performance Score</th>
+              <th>Green Score</th>
+              <th>Feature Score</th>
               <th>Feedback</th>
             </tr>
           </thead>
@@ -203,7 +147,7 @@ const StorageDeviceTable = ({ devices, onSort, sortConfig, onViewDetails, averag
         <Pagination
           currentPage={currentPage}
           totalItems={totalItems}
-          itemsPerPage={10}
+          itemsPerPage={5}
           onPageChange={handlePageChange}
         />
       </div>
